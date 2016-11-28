@@ -83,7 +83,7 @@ var parseGeometryCollection_ = function(str) {
 };
 
 var parse_ = function(wkt) {
-  wkt = wkt.replace(regExes.removeNewLine, ' ');
+  wkt = wkt.toString().replace(regExes.removeNewLine, ' ');
   var matches = regExes.typeStr.exec(wkt);
   var geometry;
   if (matches) {
