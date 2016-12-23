@@ -8,6 +8,8 @@
     'registry': 'Registry',
     'registry_layers': 'Registry of layers',
     'registry_layer_btn': 'Registry of layer',
+    'search_layers_btn': 'Search for Layers',
+    'search_layers' : 'Search for Layers',
     'map_layers': 'Layers',
     'add_layer_btn': 'Add Layer',
     'add_layers': 'Add Layers',
@@ -327,10 +329,36 @@
     'enter_spatial_filter_radius': 'Enter the spatial filter\'s radius, in meters',
     'add_spatial_filter': 'Add Spatial Filter',
     'enter_radius': 'Enter Radius',
-    'enable_auto_refresh': 'Enable Auto-refresh',
-    'refresh_interval': 'Auto-refresh interval, in seconds',
-    'set_fuel_range': 'Show Fuel Range',
-    'wfs_error': 'Error Retrieving WFS Features'
+
+    'paging_subtitle' : 'Showing {{ firstRecord }} - {{ lastRecord }} of {{ totalRecords }} matching records',
+    'sorted_by' : 'Sorted by ',
+    'ascending' : 'Ascending',
+    'descending' : 'Descending',
+    'date' : 'Date',
+    'category' : 'Category',
+    'date_created' : 'Date Created',
+    'next' : 'Next',
+    'previous' : 'Previous',
+    'clear' : 'Clear',
+    'clear_all' : 'Clear all',
+
+    'refine_layers_subtitle' : 'Refine layer list',
+
+    'layers_to_be_added' : '{{ value }} layers will be added to the map',
+
+    'map_help' : 'Zoom to limit the search to data that includes features in the displayed area.  Hover over layers in the list to preview them on the map above.',
+    'keyword_help' : 'Keywords will search titles and descriptions for matches.',
+    'date_help' : 'Filter layers by their creation date.',
+    'owner_help' : 'Filter layers by the user who owns it.',
+    'category_help' : 'Filter the layer by its metadata category.',
+    'download_csv': 'Download CSV',
+
+    'measure' : 'Measure',
+    'measure_tools' : 'Measure tools',
+    'measure_area' : 'Area',
+    'measure_line' : 'Length',
+    'measure_stop' : 'Stop measuring',
+    'measure_units' : 'Units'
   };
 
   var module = angular.module('loom_translations_en', ['pascalprecht.translate']);
