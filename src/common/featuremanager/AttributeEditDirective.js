@@ -26,6 +26,27 @@
                     if (prop.type === 'simpleType') {
                       prop.enum =
                           attributeTypes[prop[0]].simpleType.restriction.enumeration;
+                      if (featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')) {
+                        switch (prop[1]) {
+                          case '1':
+                            prop.initial = '1 - Physically Protected Path';
+                            break;
+                          case '2':
+                            prop.initial = '2 - Bike Lane';
+                            break;
+                          case '3':
+                            prop.initial = '3 - Shared Lane';
+                            break;
+                          case '4':
+                            prop.initial = '4 - Link';
+                            break;
+                          case '7':
+                            prop.initial = '7 - Stairs';
+                            break;
+                          default:
+                            prop.initial = '';
+                        }
+                      }
                     } else if (prop.type === 'xsd:boolean') {
                       prop.enum = [
                         {_value: 'true'},
@@ -276,6 +297,13 @@
               }
 
               return schema[property].visible;
+            };
+
+            scope.updateBikeClassLabel = function(elem) {
+              var labelElem = elem.closest('.input-group').querySelector('.dropdown-label');
+              if (labelElem) {
+                angular.element(labelElem).text(elem.text);
+              }
             };
 
             scope.$on('modal-closed', closeModal);
