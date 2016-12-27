@@ -47,9 +47,15 @@
               } else {
                 domain = server.url;
               }
-              url = domain + '?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=' +
-                  layer.get('metadata').name + '&transparent=true&legend_options=fontColor:0xFFFFFF;' +
-                  'fontAntiAliasing:true;fontSize:14;fontStyle:bold;';
+              if (!layer.get('metadata').name.includes('bikepath')) {
+                url = domain + '?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=' +
+                    layer.get('metadata').name + '&transparent=true&legend_options=fontColor:0xFFFFFF;' +
+                    'fontAntiAliasing:true;fontSize:14;fontStyle:bold;';
+              } else {
+                url = domain + '?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=' +
+                    layer.get('metadata').name + '&transparent=true&legend_options=fontColor:0xFFFFFF;' +
+                    'fontAntiAliasing:true;fontSize:14;fontName:SansSerif.Bold;&style=bikepath_core';
+              }
               return url;
             };
 
