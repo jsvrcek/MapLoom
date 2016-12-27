@@ -32,8 +32,8 @@
 
       <div ng-if="!featureManagerService.isMediaPropertyName(prop[0]) && isAttributeVisible(prop[0])">
         <label class="control-label custom-control-label" ng-show="(prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]) }}</label>
-        <label class="control-label custom-control-label" ng-show="prop[0] === 'fromTocl'">From {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }} To {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }} class</label>
-        <label class="control-label custom-control-label" ng-show="prop[0] === 'toFromcl'">To {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }} From {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }} class</label>
+        <label class="control-label custom-control-label" ng-show="prop[0] === 'fromTocl'">Bike route from {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }} to {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }}</label>
+        <label class="control-label custom-control-label" ng-show="prop[0] === 'toFromcl'">Bike route from {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }} to {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }}</label>
         <div ng-switch on="prop.type">
           <datetimepicker ng-switch-when="xsd:dateTime" date-object="prop[1]" default-date="inserting"></datetimepicker>
           <datetimepicker ng-switch-when="xsd:date" date-object="prop[1]" default-date="inserting" time="false"></datetimepicker>
@@ -52,6 +52,7 @@
                   <a ng-click="selectValue(prop, $index)" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 1">1 - Physically Protected Path</a>
                   <a ng-click="selectValue(prop, $index)" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 2">2 - Bike Lane</a>
                   <a ng-click="selectValue(prop, $index)" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 3">3 - Shared Lane</a>
+                  <a ng-click="selectValue(prop, $index)" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 4">4 - Link</a>
                   <a ng-click="selectValue(prop, $index)" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 7">7 - Stairs</a>
                 </li>
               </ul>

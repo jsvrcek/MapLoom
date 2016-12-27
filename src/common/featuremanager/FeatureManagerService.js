@@ -971,14 +971,14 @@
         'bikepath': {
           'BikeDir': 'Bike Direction',
           'BikeRtCond': 'Bike Route Conditions',
-          'FromStreet': 'From Street',
+          'FromStreet': 'From-Street',
           'Impediment': 'Impediments',
-          'NewRt_Y_N': 'Suggested New Route Y/N',
+          'NewRt_Y_N': 'Is this a suggested new route? (Y/N)',
           'Notes': 'Notes',
           'PhysicalID': 'Physical ID',
           'SegmentID': 'Segment ID',
           'Street': 'Street',
-          'ToStreet': 'To Street',
+          'ToStreet': 'To-Street',
           'TraffCond': 'Traffic Conditions',
           'fromTocl': 'FromTo Class',
           'toFromcl': 'ToFrom Class'
