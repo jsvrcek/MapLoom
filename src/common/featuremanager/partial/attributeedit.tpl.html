@@ -6,9 +6,12 @@
       <latloneditor id="latLonEdit" coord-display="coordDisplay" geom="coordinates"></latloneditor>
     </div>
     <div class="form-group" ng-repeat="prop in properties"
-         ng-init="readonly = (!inserting && featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') &&
-                              (prop[0] === 'Street' || prop[0] === 'SegmentID' || prop[0] === 'PhysicalID' ||
-                               prop[0] === 'BikeDir' || prop[0] === 'FromStreet' || prop[0] === 'ToStreet'));
+         ng-init="readonly = (!inserting &&
+                              ((featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') &&
+                                (prop[0] === 'Street' || prop[0] === 'SegmentID' || prop[0] === 'PhysicalID' ||
+                                 prop[0] === 'BikeDir' || prop[0] === 'FromStreet' || prop[0] === 'ToStreet')) ||
+                               (featureManagerService.getSelectedLayer().get('metadata').name.includes('building') &&
+                                (prop[0] === 'NAME' || prop[0] === 'CNSTRCT_YR' || prop[0] === 'NUM_FLOORS'))));
                   isBikepath = featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">
 
       <div ng-if="featureManagerService.isMediaPropertyName(prop[0])">
