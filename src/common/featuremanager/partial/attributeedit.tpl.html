@@ -47,15 +47,15 @@
               <ul class="dropdown-menu">
                 <li>
                   <a ng-click="selectValue(prop, null)" ng-if="!featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">&nbsp;</a>
-                  <a ng-click="selectValue(prop, null); updateBikeClassLabel($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">&nbsp;</a>
+                  <a ng-click="selectValue(prop, null); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">&nbsp;</a>
                 </li>
                 <li ng-repeat="enum in prop.enum">
                   <a ng-click="selectValue(prop, $index)" ng-if="!featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">{{enum._value}}</a>
-                  <a ng-click="selectValue(prop, $index); updateBikeClassLabel($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 1">1 - Physically Protected Path</a>
-                  <a ng-click="selectValue(prop, $index); updateBikeClassLabel($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 2">2 - Bike Lane</a>
-                  <a ng-click="selectValue(prop, $index); updateBikeClassLabel($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 3">3 - Shared Lane</a>
-                  <a ng-click="selectValue(prop, $index); updateBikeClassLabel($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 4">4 - Link</a>
-                  <a ng-click="selectValue(prop, $index); updateBikeClassLabel($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 7">7 - Stairs</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 1">1 - Physically Protected Path</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 2">2 - Bike Lane</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 3">3 - Shared Lane</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 4">4 - Link</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 7">7 - Stairs</a>
                 </li>
               </ul>
           </div>

@@ -299,11 +299,12 @@
               return schema[property].visible;
             };
 
-            scope.updateBikeClassLabel = function(elem) {
+            scope.bikeClassSelected = function(elem) {
               var labelElem = elem.closest('.input-group').querySelector('.dropdown-label');
               if (labelElem) {
                 angular.element(labelElem).text(elem.text);
               }
+              setBikeDirection(scope.properties);
             };
 
             scope.$on('modal-closed', closeModal);
@@ -316,6 +317,34 @@
             onResize();
 
             $(window).resize(onResize);
+
+            function setBikeDirection(properties) {
+              var from, to, bikeDir;
+              goog.array.forEach(properties, function(property, index, arr) {
+                if (property[0] === 'fromTocl') {
+                  from = property[1];
+                } else if (property[0] === 'toFromcl') {
+                  to = property[1];
+                } else if (property[0] === 'BikeDir') {
+                  bikeDir = property;
+                }
+              });
+              if (bikeDir) {
+                bikeDir[1] = bikeDirection(from, to);
+              }
+            }
+
+            function bikeDirection(from, to) {
+              if (from && from.trim() !== '' && to && to.trim() !== '') {
+                return 'Two-way';
+              } else if (from && from.trim() !== '') {
+                return 'With';
+              } else if (to && to.trim() !== '') {
+                return 'Against';
+              } else {
+                return '';
+              }
+            }
           }
         };
       }
