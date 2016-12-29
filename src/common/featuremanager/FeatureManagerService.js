@@ -384,6 +384,19 @@
           // -- update the selectedItemMedia_
           selectedItemMedia_ = service_.getSelectedItemMediaByProp(null);
           console.log('---- selectedItemMedia_: ', selectedItemMedia_);
+
+          // When a feature is selected and a different feature's history is shown, close the history panel
+          if (historyService_.pathFilter) {
+            var separatorIndexOf = historyService_.pathFilter.indexOf('/');
+            if (separatorIndexOf !== -1) {
+              // Determine if the feature's are different
+              var historyId = (separatorIndexOf !== -1) ?
+                  historyService_.pathFilter.slice(separatorIndexOf + 1) : historyService_.pathFilter;
+              if (historyId !== selectedItem_.id) {
+                historyService_.clearHistory();
+              }
+            }
+          }
         } else {
           mapService_.clearEditLayer();
         }
