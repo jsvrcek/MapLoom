@@ -37,7 +37,7 @@
               <div class="loom-loading" spinner-radius="16" spinner-hidden="!zooming"></div>
               <i class="glyphicon glyphicon-resize-small"></i>
             </a>
-            <a type="button" ng-click="showTable(layer)" ng-show="layer.get('metadata').editable"
+            <a type="button" ng-click="showTable(layer)" ng-show="layer.get('metadata').editable" && !layer.get('metadata').name.includes('station_point')
                class="btn btn-sm btn-default" tooltip-append-to-body="true"
                tooltip-placement="top" tooltip="{{'show_table' | translate}}">
               <div class="loom-loading" spinner-radius="16" spinner-hidden="!isLoadingTable(layer)"></div>
