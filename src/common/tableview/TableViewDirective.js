@@ -512,6 +512,35 @@
 
               return schema[property].visible;
             };
+
+            scope.setBikeDirection = function(row, self) {
+              if (scope.selectedLayer.includes('bikepath')) {
+                var featureId = row.feature.id;
+                var to = row.feature.properties['toFromcl'],
+                    from = row.feature.properties['fromTocl'],
+                    bikeDir = bikeDirection(from, to);
+
+                // Find the bike direction field corresponding to the particular row and update its value
+                for (var i in scope.tableviewform.$editables) {
+                  if (scope.tableviewform.$editables[i].name === (featureId + '-BikeDir')) {
+                    scope.tableviewform.$editables[i].scope.$data = bikeDir;
+                    break;
+                  }
+                }
+              }
+            };
+
+            function bikeDirection(from, to) {
+              if (from && from.trim() !== '' && to && to.trim() !== '') {
+                return 'Two-way';
+              } else if (from && from.trim() !== '') {
+                return 'With';
+              } else if (to && to.trim() !== '') {
+                return 'Against';
+              } else {
+                return '';
+              }
+            }
           }
         };
       });

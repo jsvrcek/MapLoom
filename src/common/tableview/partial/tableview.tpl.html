@@ -54,41 +54,42 @@
                                    (attr.name === 'Street' || attr.name === 'SegmentID' || attr.name === 'PhysicalID' ||
                                     attr.name === 'BikeDir' || attr.name === 'FromStreet' || attr.name === 'ToStreet')) ||
                                   (selectedLayer.includes('building') &&
-                                   (attr.name !== 'NAME' && attr.name !== 'CNSTRCT_YR' && attr.name !== 'NUM_FLOORS')))">
+                                   (attr.name !== 'NAME' && attr.name !== 'CNSTRCT_YR' && attr.name !== 'NUM_FLOORS')));
+                       cellName = row.feature.id + '-' + attr.name">
             <div ng-switch on="restrictions[attr.name].type" ng-class="{'wide-table-element': advFilters}">
               <span ng-switch-when="">
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
-                    e-style="width:160px" ng-if="!readonly">{{row.feature.properties[attr.name]}}</span>
+                    e-style="width:160px" ng-if="!readonly" e-name="{{cellName}}">{{row.feature.properties[attr.name]}}</span>
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
-                    e-style="width:160px" ng-if="readonly" e-readonly>{{row.feature.properties[attr.name]}}</span>
+                    e-style="width:160px" ng-if="readonly" e-readonly e-name="{{cellName}}">{{row.feature.properties[attr.name]}}</span>
               </span>
               <span ng-switch-when="noEdit">{{row.feature.properties[attr.name]}}</span>
               <span ng-switch-when="int">
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
-                    e-style="width:160px" ng-if="!readonly">{{row.feature.properties[attr.name]}}</span>
+                    e-style="width:160px" ng-if="!readonly" e-name="{{cellName}}">{{row.feature.properties[attr.name]}}</span>
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
-                    e-style="width:160px" ng-if="readonly" e-readonly>{{row.feature.properties[attr.name]}}</span>
+                    e-style="width:160px" ng-if="readonly" e-readonly e-name="{{cellName}}">{{row.feature.properties[attr.name]}}</span>
               </span>
               <span ng-switch-when="double">
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
-                    e-style="width:160px" ng-if="!readonly">{{row.feature.properties[attr.name]}}</span>
+                    e-style="width:160px" ng-if="!readonly" e-name="{{cellName}}">{{row.feature.properties[attr.name]}}</span>
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
-                    e-style="width:160px" ng-if="readonly" e-readonly>{{row.feature.properties[attr.name]}}</span>
+                    e-style="width:160px" ng-if="readonly" e-readonly e-name="{{cellName}}">{{row.feature.properties[attr.name]}}</span>
               </span>
               <div ng-switch-when="datetime">
                   <span ng-if="!tableviewform.$visible">{{row.feature.properties[attr.name] | date:"MM/dd/yyyy @ h:mm a"}}</span>
                   <datetimepicker ng-if="tableviewform.$visible" id="table-datetime" date-object="row.feature.properties[attr.name]"
-                        default-date="false" seperate-time="false" readonly="{{readonly}}"></datetimepicker>
+                        default-date="false" seperate-time="false" readonly="{{readonly}}" e-name="{{cellName}}"></datetimepicker>
               </div>
                 <div ng-switch-when="date">
                     <span ng-if="!tableviewform.$visible">{{row.feature.properties[attr.name] | date:"MM/dd/yyyy"}}</span>
                     <datetimepicker ng-if="tableviewform.$visible" id="table-datetime" date-object="row.feature.properties[attr.name]"
-                                    default-date="false" seperate-time="false" time="false" readonly="{{readonly}}"></datetimepicker>
+                                    default-date="false" seperate-time="false" time="false" readonly="{{readonly}}" e-name="{{cellName}}"></datetimepicker>
                 </div>
                 <div ng-switch-when="time">
                     <span ng-if="!tableviewform.$visible">{{row.feature.properties[attr.name] | date:"h:mm a"}}</span>
                     <datetimepicker ng-if="tableviewform.$visible" id="table-datetime" date-object="row.feature.properties[attr.name]"
-                                    default-date="false" seperate-time="false" date="false" readonly="{{readonly}}"></datetimepicker>
+                                    default-date="false" seperate-time="false" date="false" readonly="{{readonly}}" e-name="{{cellName}}"></datetimepicker>
                 </div>
               <div ng-switch-default class="input-group">
                 <span ng-if="!tableviewform.$visible">{{row.feature.properties[attr.name]}}</span>
@@ -98,14 +99,14 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li>
-                      <a ng-click="selectValue(row.feature.properties, attr.name, null)">&nbsp;</a>
+                      <a ng-click="selectValue(row.feature.properties, attr.name, null); setBikeDirection(row, this);">&nbsp;</a>
                     </li>
                     <li ng-repeat="enum in restrictions[attr.name].type">
-                      <a ng-click="selectValue(row.feature.properties, attr.name, $index)">{{enum._value}}</a>
+                      <a ng-click="selectValue(row.feature.properties, attr.name, $index); setBikeDirection(row, this);">{{enum._value}}</a>
                     </li>
                   </ul>
                 </div>
-                <input ng-if="tableviewform.$visible" ng-model="row.feature.properties[attr.name]" type="text" class="table-dropdown form-control" disabled readonly="{{readonly}}"/>
+                <span ng-if="tableviewform.$visible" editable-text="row.feature.properties[attr.name]" e-form="tableviewform" class="table-dropdown form-control" disabled readonly="{{readonly}}" e-name="{{cellName}}"/>
               </div>
             </div>
           </td>
