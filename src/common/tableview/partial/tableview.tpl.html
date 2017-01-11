@@ -54,7 +54,7 @@
                                    (attr.name === 'Street' || attr.name === 'SegmentID' || attr.name === 'PhysicalID' ||
                                     attr.name === 'BikeDir' || attr.name === 'FromStreet' || attr.name === 'ToStreet')) ||
                                   (selectedLayer.includes('building') &&
-                                   (attr.name === 'NAME' || attr.name === 'CNSTRCT_YR' || attr.name === 'NUM_FLOORS')))">
+                                   (attr.name !== 'NAME' && attr.name !== 'CNSTRCT_YR' && attr.name !== 'NUM_FLOORS')))">
             <div ng-switch on="restrictions[attr.name].type" ng-class="{'wide-table-element': advFilters}">
               <span ng-switch-when="">
                 <span editable-text="row.feature.properties[attr.name]" e-form="tableviewform"
