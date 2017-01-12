@@ -3,7 +3,7 @@
   var module = angular.module('loom_feature_info_box_directive', []);
 
   module.directive('loomFeatureInfoBox',
-      function($translate, featureManagerService, mapService, historyService, dialogService, tableViewService, $rootScope) {
+      function($translate, featureManagerService, mapService, historyService, dialogService, tableViewService, $rootScope, $http) {
 
         return {
           replace: false,
@@ -136,6 +136,63 @@
                 featureManagerService.hide();
               }
             };
+
+            scope.toggleFuelRing = function() {
+              var feature = featureManagerService.getSelectedItem();
+              var fuelRangeVectorSource;
+              var selectedLayer = featureManagerService.getSelectedLayer();
+
+              if (!mapService.fuelRangeLayer) {
+                fuelRangeVectorSource = new ol.source.Vector({});
+                var fuelRangeLayer = new ol.layer.Vector({source: fuelRangeVectorSource});
+                mapService.map.addLayer(fuelRangeLayer);
+                mapService.fuelRangeLayer = fuelRangeLayer;
+              } else {
+                fuelRangeVectorSource = mapService.fuelRangeLayer.getSource();
+              }
+
+              //We keep a reference to the fuel ring, associated with the feature's id
+              var fuelRingReference = mapService.fuelRangeLayer.get(feature.id);
+
+              if (!fuelRingReference) {
+                var rangeInNauticalMiles = featureManagerService.getSelectedItem().properties.REMAINING_FUEL_RANGE_NM;
+                var rangeInMeters = rangeInNauticalMiles * ol.proj.METERS_PER_UNIT['m'] * 1852;
+
+                var circle = ol.geom.Polygon.circular(
+                    ol.sphere.NORMAL,
+                    feature.geometry.coordinates,
+                    rangeInMeters
+                    );
+                var circleFeature = new ol.Feature(circle);
+                fuelRangeVectorSource.addFeature(circleFeature);
+                mapService.fuelRangeLayer.set(feature.id, circleFeature);
+
+                var unsub = selectedLayer.getSource().on('change', function() {
+                  var layerMetadata = selectedLayer.get('metadata');
+                  var requestURL = layerMetadata.url + '/wfs?service=wfs&request=GetFeature&outputFormat=json&version=' +
+                      settings.WFSVersion + '&typeNames=' + layerMetadata.name + '&featureID=' + feature.id;
+
+                  $http({method: 'GET', url: requestURL}).then(function success(response) {
+                    var featureData = response.data.features[0];
+                    var updatedRangeInMeters = featureData.properties.REMAINING_FUEL_RANGE_NM *
+                        ol.proj.METERS_PER_UNIT['m'] * 1852;
+
+                    circleFeature.setGeometry(ol.geom.Polygon.circular(
+                        ol.sphere.NORMAL,
+                        featureData.geometry.coordinates,
+                        updatedRangeInMeters
+                        ));
+                  });
+                });
+                circleFeature.set('unsubscribeKey', unsub);
+              } else {
+                //When removing the fuel ring, clean up all the listeners
+                selectedLayer.getSource().unByKey(fuelRingReference.get('unsubscribeKey'));
+                fuelRangeVectorSource.removeFeature(fuelRingReference);
+                mapService.fuelRangeLayer.unset(feature.id);
+              }
+            };
+
           }
         };
       }

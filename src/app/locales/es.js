@@ -323,7 +323,8 @@
     'populated_count': 'Llenado Cuentas',
     'unique_values': 'Valor Único',
     'enable_auto_refresh': 'Enable Auto-refresh',
-    'refresh_interval': 'Auto-refresh interval, in seconds'
+    'refresh_interval': 'Auto-refresh interval, in seconds',
+    'set_fuel_range': 'Fuel Range'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);
