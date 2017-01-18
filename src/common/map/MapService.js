@@ -278,7 +278,11 @@
             }
             var tileSource = layer.getSource();
             if (goog.isDefAndNotNull(tileSource)) {
-              if (goog.isDefAndNotNull(tileSource.updateParams)) {
+              if (metadata.aircraftLayer) {
+                //This is to reload the aircraft vector layer
+                service_.showHelo(layer, null);
+              }
+              else if (goog.isDefAndNotNull(tileSource.updateParams)) {
                 tileSource.updateParams({_dc: new Date().getTime()});
               }
             }
@@ -1464,6 +1468,186 @@
         draw = new ol.interaction.Draw({source: this.editLayer.getSource(), type: geometryType});
         this.map.addInteraction(draw);
       }
+    };
+
+    var _vector;
+
+    this.showHelo = function(layer, filters) {
+
+      if (goog.isDefAndNotNull(filters)) {
+        filters = goog.object.clone(filters);
+        console.log('----[ mapService.showHelo from tableview for layer: ', layer, ', filters: ', filters);
+      } else {
+        console.log('----[ mapService.showHelo for layer, no filter ', layer);
+      }
+
+      var defaultStyle = [new ol.style.Style({
+        fill: new ol.style.Fill({color: 'rgba(255, 255, 255, 0.1)'}),
+        stroke: new ol.style.Stroke({color: 'red', width: 1}),
+        image: new ol.style.RegularShape({
+          radius: 8,
+          radius2: 0,
+          fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
+          stroke: new ol.style.Stroke({color: 'red', width: 1}),
+          angle: 0,
+          points: 4
+        })
+      })];
+
+
+      var source = new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        loader: function(extent, resolution, projection) {
+          tableViewService_.getFeaturesWfs(layer, filters, extent).then(function(response) {
+            var features = new ol.format.GeoJSON().readFeatures(response);
+            for (i = 0; i < features.length; i++) {
+              var feature = features[i];
+
+              var coords = [];
+              var d_to_d = feature.get('DEPARTURE_TO_DESTINATION_GEOM');
+
+              var lineString = new ol.geom.LineString(coords);
+
+              if (d_to_d) {
+                lineString = new ol.geom.LineString(feature.get('DEPARTURE_TO_DESTINATION_GEOM').coordinates);
+              }
+
+
+              var geomCollection = new ol.geom.GeometryCollection([
+                new ol.geom.Point(ol.proj.transform([feature.get('GPS_LON'), feature.get('GPS_LAT')],
+                    'EPSG:4326', 'EPSG:3857')),
+                new ol.geom.Point(ol.proj.transform([feature.get('DEPARTURE_LON'), feature.get('DEPARTURE_LAT')],
+                    'EPSG:4326', 'EPSG:3857')),
+                new ol.geom.Point(ol.proj.transform([feature.get('DESTINATION_LON'), feature.get('DESTINATION_LAT')],
+                    'EPSG:4326', 'EPSG:3857')),
+                lineString]);
+
+              console.log(feature.get('DEPARTURE_TO_DESTINATION_GEOM'));
+              features[i].set('geometry', geomCollection);
+            }
+            source.addFeatures(features);
+          }, function(reject) {
+            dialogService_.open(translate_.instant('error'), translate_.instant('error'));
+          });
+        },
+        projection: 'EPSG:3857'
+      });
+
+      window.setInterval(function() {
+        if (source) {
+          source.dispatchEvent('change');
+        }
+      }, 1000 / 50);
+
+      var styleFunc = function(feature) {
+        var geometries = feature.getGeometry().getGeometries();
+        var speed = feature.get('SPEED');
+
+
+        var departureStyle = new ol.style.Style({
+          geometry: geometries[1],
+          image: new ol.style.RegularShape({
+            stroke: new ol.style.Stroke({color: 'black', width: 1}),
+            fill: new ol.style.Fill({color: '#7E3F0C'}),
+            points: 3,
+            radius: 5,
+            rotation: Math.PI / 4,
+            angle: 0
+          })
+        });
+
+
+        var lineStyle = new ol.style.Style({
+          geometry: geometries[3],
+          stroke: new ol.style.Stroke(/** @type {olx.style.IconOptions} */ ({
+            color: '#0000cd',
+            width: 1
+          }))
+        });
+
+        var destinationStyle = new ol.style.Style({
+          geometry: geometries[2],
+          image: new ol.style.RegularShape({
+            stroke: new ol.style.Stroke({color: 'black', width: 1}),
+            fill: new ol.style.Fill({color: '#0F7F12'}),
+            points: 4,
+            radius: 5,
+            rotation: Math.PI / 4,
+            angle: 0
+          })
+
+        });
+
+
+        var canvas = feature.get('color') ? document.getElementById('canvas' + feature.get('color')) : document.getElementById('canvas');
+
+        var airCraftStyle = new ol.style.Style({
+          geometry: geometries[0],
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            rotation: 0.01745329251 * parseInt(feature.get('HEADING'), 10),
+            img: canvas,
+            imgSize: [62, 62]
+          })),
+          text: new ol.style.Text({
+            text: feature.get('ASSET_NAME'),
+            fill: new ol.style.Fill({color: 'black'}),
+            stroke: new ol.style.Stroke({color: 'yellow', width: 1}),
+            offsetX: -20,
+            offsetY: 20
+          })
+        });
+
+
+        if (typeof speed != 'undefined') {
+          var colors = ['Green'];
+          feature.set('color', colors[0]);
+          if (feature.get('SPEED') < 0) {
+            return new ol.style.Style({
+              image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                rotation: parseInt(feature.get('HEADING'), 10),
+                src: '/static/img/chopper.png',
+                size: [256, 256],
+                scale: 0.25
+              }))
+            });
+          } else {
+            return [airCraftStyle, departureStyle, destinationStyle, lineStyle];
+          }
+        }
+        else {
+          return defaultStyle[0];
+        }
+
+      };
+      var vector = new ol.layer.Vector({
+        metadata: {
+          name: layer.get('metadata').name,
+          title: layer.get('metadata').title + ' Vector',
+          url: layer.get('metadata').url,
+          projection: layer.get('metadata').projection,
+          aircraftLayer: true,
+          uniqueID: sha1('vAircraft'),
+          editable: false
+        },
+        source: source,
+        style: styleFunc
+      });
+
+
+      if (_vector) {
+        this.map.removeLayer(_vector);
+      }
+      this.map.addLayer(vector);
+      _vector = vector;
+
+      rootScope_.$broadcast('layer-added');
+
+      // TODO: somewhere better?
+      if (goog.isDefAndNotNull(layer)) {
+        layer.get('metadata').loadingHelo = false;
+      }
+
+      return layer;
     };
 
     this.showHeatmap = function(layer, filters) {

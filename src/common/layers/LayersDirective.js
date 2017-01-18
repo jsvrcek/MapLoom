@@ -90,6 +90,17 @@
               return goog.isDefAndNotNull(loading) && loading === true;
             };
 
+            scope.isLoadingHelo = function(layer) {
+              var loading = layer.get('metadata').loadingHelo;
+              return goog.isDefAndNotNull(loading) && loading === true;
+            };
+
+            scope.showHelo = function(layer) {
+              layer.get('metadata').loadingHelo = true;
+              layer.get('metadata').projection = 'EPSG:900913';
+              mapService.showHelo(layer);
+            };
+
             scope.showHeatmap = function(layer) {
               layer.get('metadata').loadingHeatmap = true;
               mapService.showHeatmap(layer);
