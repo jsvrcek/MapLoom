@@ -1536,6 +1536,8 @@
     };
 
     var _vector;
+    //Keep track of any intervals we start, so we can unsub them when we delete a layer
+    var _intervalHandler;
 
     this.showHelo = function(layer, filters) {
 
@@ -1558,7 +1560,6 @@
           points: 4
         })
       })];
-
 
       var source = new ol.source.Vector({
         format: new ol.format.GeoJSON(),
@@ -1598,7 +1599,11 @@
         projection: 'EPSG:3857'
       });
 
-      window.setInterval(function() {
+      if (_intervalHandler) {
+        window.clearInterval(_intervalHandler);
+      }
+
+      _intervalHandler = window.setInterval(function() {
         if (source) {
           source.dispatchEvent('change');
         }
@@ -1700,6 +1705,7 @@
 
 
       if (_vector) {
+        _vector.getSource().clear();
         this.map.removeLayer(_vector);
       }
       this.map.addLayer(vector);
