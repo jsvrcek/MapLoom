@@ -10,7 +10,7 @@
   left: -50px;
   white-space:nowrap;
   text-overflow: ellipsis;
-  min-width: 250px;
+  min-width: 450px;
   &:after, &:before {
     top: 100%;
     border: solid transparent;
@@ -39,8 +39,8 @@
 }
 
 .info-box-mixin {
-  max-height: 150px;
-  min-width: 50px;
+  max-height: 350px;
+  min-width: 450px;
   overflow: hidden;
 }
 
@@ -92,6 +92,10 @@
   text-transform: capitalize;
 }
 
+span.row {
+  width: 100%;
+}
+
 .info-box-attribute {
   /*display: block;
   width: 190px;*/
@@ -104,13 +108,14 @@
 
 .info-box-attribute-value {
   display: block;
-  width: 190px;
-  max-width: 190px;
+  //width: 190px;
+  max-width: 390px;
   margin: 0;
   padding: 0 0 7px;
   font: @featureInfoBoxValueFont;
   white-space: normal;
   word-wrap: break-word;
+  text-align: right;
 }
 
 #feature-info-box-bottom {

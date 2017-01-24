@@ -3,7 +3,6 @@
 
   var httpService_ = null;
   var q_ = null;
-  var configService_ = null;
   var mapService_ = null;
   var searchlayer_ = null;
 
@@ -11,7 +10,6 @@
     this.$get = function($rootScope, $http, $q, $translate, configService, mapService) {
       httpService_ = $http;
       q_ = $q;
-      configService_ = configService;
       mapService_ = mapService;
 
       searchlayer_ = new ol.layer.Vector({
@@ -45,34 +43,18 @@
     };
 
     this.performSearch = function(address) {
-      var currentView = mapService_.map.getView().calculateExtent([$(window).height(), $(window).width()]);
-      var minBox = ol.proj.transform([currentView[0], currentView[1]],
-          mapService_.map.getView().getProjection(), 'EPSG:4326');
-      var maxBox = ol.proj.transform([currentView[2], currentView[3]],
-          mapService_.map.getView().getProjection(), 'EPSG:4326');
-      currentView[0] = minBox[0];
-      currentView[1] = minBox[1];
-      currentView[2] = maxBox[0];
-      currentView[3] = maxBox[1];
       var promise = q_.defer();
-      var nominatimUrl = configService_.configuration.nominatimUrl;
-      if (nominatimUrl.substr(nominatimUrl.length - 1) === '/') {
-        nominatimUrl = nominatimUrl.substr(0, nominatimUrl.length - 1);
-      }
-      var url = nominatimUrl + '/search?q=' + encodeURIComponent(address) +
-          '&format=json&limit=30&viewboxlbrt=' + encodeURIComponent(currentView.toString());
+      var url = "/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application%2Fjson&typeName=geonode:ERAMAP_BASES_MV&maxFeatures=50&filter=<Filter><PropertyIsLike wildCard='*' singleChar='.' escape='!'><PropertyName>LOCATION_NAME</PropertyName><Literal>*" +
+          address.toUpperCase() + '*</Literal></PropertyIsLike></Filter>';
+
       httpService_.get(url).then(function(response) {
-        if (goog.isDefAndNotNull(response.data) && goog.isArray(response.data)) {
+        if (goog.isDefAndNotNull(response.data) && goog.isArray(response.data.features)) {
           var results = [];
-          forEachArrayish(response.data, function(result) {
-            var bbox = result.boundingbox;
-            for (var i = 0; i < bbox.length; i++) {
-              bbox[i] = parseFloat(bbox[i]);
-            }
+          forEachArrayish(response.data.features, function(result) {
             results.push({
-              location: [parseFloat(result.lon), parseFloat(result.lat)],
-              boundingbox: bbox,
-              name: result.display_name
+              location: result.geometry.coordinates,
+              boundingbox: [result.geometry.coordinates[1], result.geometry.coordinates[1], result.geometry.coordinates[0], result.geometry.coordinates[0]],
+              name: result.properties.TITLE
             });
           });
           promise.resolve(results);

@@ -39,10 +39,10 @@
 
     <div class="feature-info-box">
       <span class="info-box-attribute" ng-show="!isShowingAttributes()" translate="no_attributes"></span>
-      <span ng-repeat="prop in featureManagerService.getSelectedItemProperties()">
+      <span class="row" ng-repeat="prop in featureManagerService.getSelectedItemProperties()">
         <div ng-if="!featureManagerService.isMediaPropertyName(prop[0])" ng-show="isAttributeVisible(prop[0])">
-          <span class="info-box-attribute col-md-3">{{prop[0]}}</span>
-            <span class="col-md-9" ng-switch on="isUrl(prop[1])">
+          <span class="info-box-attribute col-md-4">{{prop[0]}}</span>
+            <span class="col-md-8" ng-switch on="isUrl(prop[1])">
               <a ng-switch-when="true" class="info-box-attribute-value" target="_blank" href="{{prop[1]}}">{{prop[1]}}</a>
               <span ng-switch-default class="info-box-attribute-value">{{prop[1]}}</span>
             </span>
