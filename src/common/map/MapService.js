@@ -730,7 +730,7 @@
           var attribution = new ol.Attribution({
             html: 'Tiles &copy; <a href="' + server.url + '">ArcGIS</a>'
           });
-          var serviceUrl = server.url + 'tile/{z}/{y}/{x}';
+          var serviceUrl = server.url + '/tile/{z}/{y}/{x}';
           var serviceSource = null;
           if (server.proj === 'EPSG:4326') {
             var projection = ol.proj.get('EPSG:4326');
