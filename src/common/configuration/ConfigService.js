@@ -49,6 +49,17 @@
     this.$get = function($window, $http, $cookies, $location, $translate) {
       service_ = this;
       var serverLocation = $location.protocol() + '://' + $location.host();
+      if ($location.port() != 80) {
+        serverLocation += ':' + $location.port();
+      }
+
+      // Remove the schema from a URL
+      var stripUrl = function(url) {
+        if (url.substring(0, 4) == 'http') {
+          return url.substring(url.indexOf('//'));
+        }
+        return url;
+      };
 
       this.configuration = {
         about: {
@@ -76,7 +87,7 @@
         },
         sources: [
           {
-            'url': (serverLocation + '/geoserver/wms'),
+            'url': stripUrl(serverLocation + '/geoserver/wms'),
             'restUrl': '/gs/rest',
             'ptype': 'gxp_wmscsource',
             'name': 'Local GeoServer',
@@ -101,7 +112,7 @@
         id: 0,
         proxy: '/proxy/?url=',
         useProxy: false,
-        nominatimUrl: 'http://nominatim.openstreetmap.org',
+        nominatimUrl: '//nominatim.openstreetmap.org',
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,

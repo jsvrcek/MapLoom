@@ -1,6 +1,6 @@
 {
   "name": "MapLoom",
-  "version": "1.5.11",
+  "version": "1.5.16",
   "devDependencies": {},
   "dependencies": {
     "bootstrap": "3.0.0",
@@ -25,6 +25,7 @@
     "bootstrap-filestyl": "git://github.com/markusslima/bootstrap-filestyle.git#1.2.1",
     "node-uuid": "^1.4.7",
     "angularjs-slider": "~2.13.0",
-    "components-font-awesome": "4.6.3"
+    "components-font-awesome": "4.6.3",
+    "angular-file-saver": "1.0.1"
   }
 }

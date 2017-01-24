@@ -266,7 +266,7 @@
     };
 
     this.dumpTileCache = function(layerToDump) {
-      var layers = this.getLayers(); //Note: does not get hidden or imagery layers
+      var layers = this.getLayers(true, true);
       forEachArrayish(layers, function(layer) {
         if (goog.isDefAndNotNull(layer.getSource)) {
           var metadata = layer.get('metadata');
@@ -514,7 +514,7 @@
           //TODO: translate
           deferredResponse.reject('epsgCode could not be converted to valid number');
         } else {
-          var url = 'http://epsg.io/' + epsgCodeAsNumber + '.js';
+          var url = '//epsg.io/' + epsgCodeAsNumber + '.js';
           httpService_.get(url).then(function(response) {
             if (goog.isDefAndNotNull(response) && goog.isDefAndNotNull(response.data) && response.data.indexOf('proj4.defs(') === 0) {
               try {
@@ -559,13 +559,13 @@
      */
     this.createLayer = function(minimalConfig, opt_layerOrder) {
       var server = serverService_.getServerById(minimalConfig.source);
-      if (server.ptype === 'gxp_mapquestsource' && minimalConfig.name === 'naip') {
+      if (goog.isDefAndNotNull(server) && server.ptype === 'gxp_mapquestsource' && minimalConfig.name === 'naip') {
         minimalConfig.name = 'sat';
       }
 
       var fullConfig = null;
       if (goog.isDefAndNotNull(server)) {
-        fullConfig = serverService_.getLayerConfig(server.id, minimalConfig.name);
+        fullConfig = serverService_.getLayerConfig(server.id, minimalConfig);
       }
 
       if (goog.isDefAndNotNull(minimalConfig.registryConfig)) {
@@ -703,7 +703,7 @@
 
           var parms = {
             //url: 'http://api.tiles.mapbox.com/v3/mapbox.' + fullConfig.sourceParams.layer + '.json?access_token=pk.eyJ1IjoiYmVja2VyciIsImEiOiJjaWtzcHVyeTYwMDA3dWdsenB5aHUxMzl1In0.1FVjOTdhoXGXtnfApX8wVQ',
-            url: 'http://api.tiles.mapbox.com/v4/mapbox.' + fullConfig.sourceParams.layer + '.json?access_token=pk.eyJ1IjoiYmVja2VyciIsImEiOiJjaWtzcHVyeTYwMDA3dWdsenB5aHUxMzl1In0.1FVjOTdhoXGXtnfApX8wVQ',
+            url: '//api.tiles.mapbox.com/v4/mapbox.' + fullConfig.sourceParams.layer + '.json?access_token=pk.eyJ1IjoiYmVja2VyciIsImEiOiJjaWtzcHVyeTYwMDA3dWdsenB5aHUxMzl1In0.1FVjOTdhoXGXtnfApX8wVQ',
             crossOrigin: true
           };
           var mbsource = new ol.source.TileJSON(parms);
