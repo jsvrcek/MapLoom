@@ -1,0 +1,67 @@
+.comment-moderation-scroll-pane {
+  max-height: 300px;
+  overflow-y: auto;
+
+  .comment-moderation-loading .loading-container {
+    background-color: inherit;
+  }
+
+  .diff-loading .loading-container {
+    background-color: @loadingBackgroundColor;
+  }
+
+  .list-group {
+    overflow-y: hidden;
+  }
+  .list-group-item {
+    height: 40px;
+  }
+
+  .comment-moderation-last-list-item {
+    display: none;
+  }
+}
+
+.comment-moderation-loading .loading-container {
+  background-color: @loadingBackgroundColor;
+}
+
+.comment-summary {
+  height: 15px;
+  position: absolute;
+  width: 80px;
+  margin-bottom: 0px;
+  right: 14px;
+  border: 1px solid @layerHeaderColor;
+  border-radius: 5px;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  &.approved {
+    background-color: @addColor;
+  }
+  &.rejected {
+    background-color: @deleteColor;
+  }
+  &.pending {
+    background-color: @modifyColor;
+  }
+}
+
+.comment-author-name {
+  position: absolute;
+  top: 0px;
+  width: 170px;
+  font-weight: 900;
+}
+
+.comment-submit-time {
+  position: absolute;
+  top: 19px;
+  left: 14px;
+  width: 170px;
+  font-size: 13px;
+}
+
