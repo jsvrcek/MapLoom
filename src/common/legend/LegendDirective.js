@@ -48,25 +48,18 @@
                 domain = server.url;
               }
 
+              var params = {
+                request: 'GetLegendGraphic',
+                format: 'image/png',
+                width: '20', height: '20',
+                transparent: 'true',
+                legend_options: 'fontColor:0xFFFFFF;fontAntiAliasing:true;fontSize:14;fontStyle:bold;',
+                layer: layer.get('metadata').name
+              };
+
               if (layer.get('metadata').name.includes('bikepath')) {
-                var params = {
-                  request: 'GetLegendGraphic',
-                  format: 'image/png',
-                  width: '20', height: '20',
-                  transparent: 'true',
-                  legend_options: 'fontColor:0xFFFFFF;fontAntiAliasing:true;fontSize:14;fontName:SansSerif.Bold;',
-                  style: 'bikepath_core',
-                  layer: layer.get('metadata').name
-                };
-              } else {
-                var params = {
-                  request: 'GetLegendGraphic',
-                  format: 'image/png',
-                  width: '20', height: '20',
-                  transparent: 'true',
-                  legend_options: 'fontColor:0xFFFFFF;fontAntiAliasing:true;fontSize:14;fontStyle:bold;',
-                  layer: layer.get('metadata').name
-                };
+                params['legend_options'] = 'fontColor:0xFFFFFF;fontAntiAliasing:true;fontSize:14;fontName:SansSerif.Bold;';
+                params['style'] = 'bikepath_core';
               }
 
               // parse the server url
