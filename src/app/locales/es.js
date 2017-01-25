@@ -167,6 +167,7 @@
     'toggle_visibility': 'Modificar la Visibilidad',
     'remote_options': 'Opciones Remotas',
     'history_summary': 'Resumen de Historial',
+    'comment_summary': 'Resumen de Comentario',
     'zoom_world': 'Regresar a Mapa Mundial',
     'legend_title': 'Descripcion',
     'toggle_legend': 'Modificar la Descripcion',

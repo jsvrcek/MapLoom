@@ -8,6 +8,8 @@
     'loom_update_notification',
     'loom_history',
     'loom_history_controller',
+    'loom_comment_moderation',
+    'loom_comment_moderation_controller',
     'loom_diff',
     'loom_diff_controller',
     'loom_modal',

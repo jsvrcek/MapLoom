@@ -258,6 +258,22 @@
             </div>
             <div id="diff-panel" class="loom-diff-panel panel-collapse collapse pulldown-panel">Diffs go here.</div>
           </div>
+            <!--TODO: Ng Show based on whether there are comments or not-->
+          <div class="panel" ng-show="true" ng-controller="LoomCommentModerationController">
+            <div class="panel-heading fixed-height-header" data-toggle="collapse" data-parent="#pulldown-content"
+                 data-target="#comment-moderation-panel">
+              <span class="ellipsis pulldown-menu-title">{{title}}</span>
+
+              <!--<div stop-event='click' ng-click="clearHistory()"-->
+                   <!--class="glyphicon glyphicon-remove pull-right panel-header-button"></div>-->
+              <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#commentModerationWindow')"
+                   tooltip-placement="top" tooltip="{{'comment_summary' | translate}}" tooltip-append-to-body="true"
+                   class="glyphicon glyphicon-list-alt pull-right panel-header-button"></div>
+            </div>
+            <div id="comment-moderation-panel" class="panel-collapse collapse pulldown-panel">
+              <!--<div loom-history-panel></div>-->
+            </div>
+          </div>
         </div>
       </div>
     </div>

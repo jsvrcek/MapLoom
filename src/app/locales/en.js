@@ -165,6 +165,7 @@
     'toggle_visibility': 'Toggle Visibility',
     'remote_options': 'Remote Options',
     'history_summary': 'History Summary',
+    'comment_summary': 'Comment Summary',
     'zoom_world': 'Zoom To World',
     'legend_title': 'Legend',
     'toggle_legend': 'Toggle Legend',
