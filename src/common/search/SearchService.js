@@ -42,30 +42,53 @@
       return this;
     };
 
-    this.performSearch = function(address) {
-      var promise = q_.defer();
-      var url = "/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application%2Fjson&typeName=geonode:ERAMAP_BASES_MV&maxFeatures=50&filter=<Filter><PropertyIsLike wildCard='*' singleChar='.' escape='!'><PropertyName>LOCATION_NAME</PropertyName><Literal>*" +
-          address.toUpperCase() + '*</Literal></PropertyIsLike></Filter>';
+    this.performSearch = function(searchTerm) {
+      //Given a layerName and the propertyName, generates the url string to make the wfs feature search for the searchTerm
+      function generateURL(layerName, propertyName) {
+        return '/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application%2Fjson&typeName=' + layerName +
+            "&maxFeatures=50&filter=<Filter><PropertyIsLike wildCard='*' singleChar='.' escape='!'><PropertyName>" + propertyName +
+            '</PropertyName><Literal>*' +
+            searchTerm.toUpperCase() + '*</Literal></PropertyIsLike></Filter>';
+      }
 
-      httpService_.get(url).then(function(response) {
+      function convertResponseIntoResults(response) {
         if (goog.isDefAndNotNull(response.data) && goog.isArray(response.data.features)) {
           var results = [];
           forEachArrayish(response.data.features, function(result) {
             results.push({
               location: result.geometry.coordinates,
-              boundingbox: [result.geometry.coordinates[1], result.geometry.coordinates[1], result.geometry.coordinates[0], result.geometry.coordinates[0]],
+              boundingbox: [+result.geometry.coordinates[1] - 0.3, +result.geometry.coordinates[1] + 0.3, +result.geometry.coordinates[0] - 0.1, +result.geometry.coordinates[0] + 0.1],
               name: result.properties.TITLE
             });
           });
-          promise.resolve(results);
+          return results;
         } else {
-          promise.reject(response.status);
+          return [];
         }
-      }, function(reject) {
-        promise.reject(reject.status);
-      });
+      }
 
-      return promise.promise;
+      //Generate a url for BASES, AIR, and CHECK
+      //On all promises returning ($q.all([])), parse them all into a single list, sort by tailnumber, resolve the returned promise
+      var bases = httpService_.get(generateURL('geonode:ERAMAP_BASES_MV', 'LOCATION_NAME')).then(convertResponseIntoResults);
+      var air = httpService_.get(generateURL('geonode:ERAMAP_AIRCRAFT_AIR_MV', 'ASSET_NAME')).then(convertResponseIntoResults);
+      var check = httpService_.get(generateURL('geonode:ERAMAP_AIRCRAFT_CHECK_MV', 'ASSET_NAME')).then(convertResponseIntoResults);
+
+      return q_.all([bases, air, check]).then(function(results) {
+        var unsortedArray = [];
+        forEachArrayish(results, function(arr) {
+          unsortedArray = unsortedArray.concat(arr);
+        });
+        //Sort by display names
+        return unsortedArray.sort(function(a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      });
     };
 
     this.populateSearchLayer = function(results) {
