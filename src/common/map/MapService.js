@@ -1648,7 +1648,6 @@
 
         });
 
-
         var canvas = feature.get('color') ? document.getElementById('canvas' + feature.get('color')) : document.getElementById('canvas');
 
         var airCraftStyle = new ol.style.Style({
@@ -1670,7 +1669,12 @@
 
         if (typeof speed != 'undefined') {
           var colors = ['Green'];
+
+          if (feature.get('APPROACH') === 1) {
+            colors = ['Red'];
+          }
           feature.set('color', colors[0]);
+
           if (feature.get('SPEED') < 0) {
             return new ol.style.Style({
               image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
