@@ -329,7 +329,7 @@
     'enter_radius': 'Enter Radius',
     'enable_auto_refresh': 'Enable Auto-refresh',
     'refresh_interval': 'Auto-refresh interval, in seconds',
-    'set_fuel_range': 'Fuel Range'
+    'set_fuel_range': 'Show Fuel Range'
   };
 
   var module = angular.module('loom_translations_en', ['pascalprecht.translate']);

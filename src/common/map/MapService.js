@@ -1337,11 +1337,13 @@
         if (state) {
           $('#map .metric-scale-line').css('bottom', '+=40px');
           $('#map .imperial-scale-line').css('bottom', '+=40px');
+          $('#map .nautical-scale-line').css('bottom', '+=40px');
           $('#map .ol-mouse-position').css('bottom', '+=40px');
           $('#switch-coords-border').css('bottom', '+=40px');
         } else {
           $('#map .metric-scale-line').css('bottom', '-=40px');
           $('#map .imperial-scale-line').css('bottom', '-=40px');
+          $('#map .nautical-scale-line').css('bottom', '-=40px');
           $('#map .ol-mouse-position').css('bottom', '-=40px');
           $('#switch-coords-border').css('bottom', '-=40px');
         }
@@ -1390,6 +1392,68 @@
         projection: 'EPSG:4326',
         coordinateFormat: coordDisplay
       });
+
+      var nauticalScale = new ol.control.ScaleLine({className: 'nautical-scale-line ol-scale-line', units: ol.control.ScaleLineUnits.NAUTICAL,
+        render: function(mapEvent) {
+          //Have to write a custom render function as this scale always needs to display 20 nautical miles
+          var frameState = mapEvent.frameState;
+          if (!frameState) {
+            this.viewState_ = null;
+          } else {
+            this.viewState_ = frameState.viewState;
+          }
+
+
+          var viewState = this.viewState_;
+
+          if (!viewState) {
+            if (this.renderedVisible_) {
+              this.element_.style.display = 'none';
+              this.renderedVisible_ = false;
+            }
+            return;
+          }
+
+          var center = viewState.center;
+          var projection = viewState.projection;
+          var metersPerUnit = projection.getMetersPerUnit();
+          var pointResolution =
+              projection.getPointResolution(viewState.resolution, center) *
+              metersPerUnit;
+
+          pointResolution /= 1852;
+          var suffix = 'nm';
+
+          var nauticalMiles = 20;
+          var width = Math.round(nauticalMiles / pointResolution);
+
+          var html = nauticalMiles + ' ' + suffix;
+          if (this.renderedHTML_ != html) {
+            this.innerElement_.innerHTML = html;
+            this.renderedHTML_ = html;
+          }
+
+          //If the scale is wider than 60% the screen, hide it
+          //If it's smaller than 15 pixels, hide it as the text won't fit inside the scale
+          if (width > mapEvent.frameState.size[0] * 0.6 || width < 15) {
+            this.element_.style.display = 'none';
+            this.renderedVisible_ = false;
+            return;
+          }
+
+          if (this.renderedWidth_ != width) {
+            this.innerElement_.style.width = width + 'px';
+            this.renderedWidth_ = width;
+          }
+
+          if (!this.renderedVisible_) {
+            this.element_.style.display = '';
+            this.renderedVisible_ = true;
+          }
+
+        }});
+
+
       var map = new ol.Map({
         //layers: do not add any layers to the map as they will be added once server is created and getcapabilities
         //        equivalent functions respond if relevant.
@@ -1400,7 +1464,8 @@
           new ol.control.ScaleLine({className: 'metric-scale-line ol-scale-line',
             units: ol.control.ScaleLineUnits.METRIC}),
           new ol.control.ScaleLine({className: 'imperial-scale-line ol-scale-line',
-            units: ol.control.ScaleLineUnits.IMPERIAL})
+            units: ol.control.ScaleLineUnits.IMPERIAL}),
+          nauticalScale
         ]),
         interactions: ol.interaction.defaults().extend([
           new ol.interaction.DragRotate()
@@ -1471,6 +1536,8 @@
     };
 
     var _vector;
+    //Keep track of any intervals we start, so we can unsub them when we delete a layer
+    var _intervalHandler;
 
     this.showHelo = function(layer, filters) {
 
@@ -1493,7 +1560,6 @@
           points: 4
         })
       })];
-
 
       var source = new ol.source.Vector({
         format: new ol.format.GeoJSON(),
@@ -1533,7 +1599,11 @@
         projection: 'EPSG:3857'
       });
 
-      window.setInterval(function() {
+      if (_intervalHandler) {
+        window.clearInterval(_intervalHandler);
+      }
+
+      _intervalHandler = window.setInterval(function() {
         if (source) {
           source.dispatchEvent('change');
         }
@@ -1578,7 +1648,6 @@
 
         });
 
-
         var canvas = feature.get('color') ? document.getElementById('canvas' + feature.get('color')) : document.getElementById('canvas');
 
         var airCraftStyle = new ol.style.Style({
@@ -1600,7 +1669,12 @@
 
         if (typeof speed != 'undefined') {
           var colors = ['Green'];
+
+          if (feature.get('APPROACH') === 1) {
+            colors = ['Red'];
+          }
           feature.set('color', colors[0]);
+
           if (feature.get('SPEED') < 0) {
             return new ol.style.Style({
               image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
@@ -1635,6 +1709,7 @@
 
 
       if (_vector) {
+        _vector.getSource().clear();
         this.map.removeLayer(_vector);
       }
       this.map.addLayer(vector);
