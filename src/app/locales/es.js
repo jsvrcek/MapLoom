@@ -324,7 +324,8 @@
     'unique_values': 'Valor Único',
     'enable_auto_refresh': 'Enable Auto-refresh',
     'refresh_interval': 'Auto-refresh interval, in seconds',
-    'set_fuel_range': 'Show Fuel Range'
+    'set_fuel_range': 'Show Fuel Range',
+    'wfs_error': 'Error Retrieving WFS Features'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);

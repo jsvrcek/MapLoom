@@ -1593,7 +1593,8 @@
             }
             source.addFeatures(features);
           }, function(reject) {
-            dialogService_.open(translate_.instant('error'), translate_.instant('error'));
+            console.error('Get Features WFS Rejected:', reject);
+            dialogService_.open(translate_.instant('error'), translate_.instant('wfs_error'));
           });
         },
         projection: 'EPSG:3857'
