@@ -1054,6 +1054,68 @@
         });
       }
     });
+    mapService_.map.on('singleclick', function(evt) {
+      var selectedFeature;
+      mapService_.map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+        selectedFeature = feature;
+      });
+      clickPosition_ = evt.coordinate;
+      var popupDep = mapService_.map.getOverlayById('depPopup');
+      var popupDest = mapService_.map.getOverlayById('destPopup');
+      if (!popupDep) {
+        $('#map').append($('<div class="feature-info-box-popup" id="destPopup"><div class="info-box-title-row"><div class="info-box-title">Destination</div></div><div class="feature-info-box"></div></div>'));
+        $('#map').append($('<div class="feature-info-box-popup" id="depPopup"><div class="info-box-title-row"><div class="info-box-title">Departure</div></div><div class="feature-info-box"></div></div>'));
+        popupDep = new ol.Overlay({
+          id: 'depPopup',
+          element: document.getElementById('depPopup'),
+          positioning: 'top-left'
+        });
+        popupDest = new ol.Overlay({
+          id: 'destPopup',
+          element: document.getElementById('destPopup'),
+          positioning: 'bottom-right'
+        });
+        mapService_.map.addOverlay(popupDep);
+        mapService_.map.addOverlay(popupDest);
+      }
+      if (selectedFeature) {
+
+        var destinationHTML = '';
+        var departureHTML = '';
+        var departurePoint =
+            new ol.geom.Point(ol.proj.transform([selectedFeature.get('DEPARTURE_LON'), selectedFeature.get('DEPARTURE_LAT')],
+            'EPSG:4326', 'EPSG:3857'));
+
+        var destinationPoint =
+            new ol.geom.Point(ol.proj.transform([selectedFeature.get('DESTINATION_LON'), selectedFeature.get('DESTINATION_LAT')],
+            'EPSG:4326', 'EPSG:3857'));
+
+        var properties = selectedFeature.getProperties();
+        for (var key in properties) {
+          if (key.toLowerCase().indexOf('dest') === 0) {
+            if (properties[key] !== undefined) {
+              destinationHTML += '<span class="row"><div><span class="info-box-attribute col-md-4">' + key + '</span><span class="col-md-8 info-box-attribute-value">' + properties[key] + '</span></div></span>';
+            }
+          } else if (key.toLowerCase().indexOf('dep') === 0) {
+            if (properties[key] !== undefined) {
+              departureHTML += '<span class="row"><div><span class="info-box-attribute col-md-4">' + key + '</span><span class="col-md-8 info-box-attribute-value">' + properties[key] + '</span></div></span>';
+            }
+          }
+        }
+
+
+        $(popupDep.getElement()).find('.feature-info-box').html(departureHTML);
+        popupDep.setPosition(departurePoint.getCoordinates());
+        popupDep.setVisible(true);
+        $(popupDest.getElement()).find('.feature-info-box').html(destinationHTML);
+        popupDest.setPosition(destinationPoint.getCoordinates());
+        popupDest.setVisible(true);
+      } else {
+        mapService_.map.removeOverlay(popupDep);
+        mapService_.map.removeOverlay(popupDest);
+      }
+    });
+
   }
 
   function classifyItem(item) {
