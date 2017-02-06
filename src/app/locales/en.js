@@ -165,7 +165,7 @@
     'toggle_visibility': 'Toggle Visibility',
     'remote_options': 'Remote Options',
     'history_summary': 'History Summary',
-    'comment_summary': 'Comment Summary',
+    'comment_summary': 'Comments',
     'zoom_world': 'Zoom To World',
     'legend_title': 'Legend',
     'toggle_legend': 'Toggle Legend',
@@ -359,7 +359,9 @@
     'measure_area' : 'Area',
     'measure_line' : 'Length',
     'measure_stop' : 'Stop measuring',
-    'measure_units' : 'Units'
+    'measure_units' : 'Units',
+    'comment_time' : 'Submission Date',
+    'comment_title' : 'Comment Title'
   };
 
   var module = angular.module('loom_translations_en', ['pascalprecht.translate']);

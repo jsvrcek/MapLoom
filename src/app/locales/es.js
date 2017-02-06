@@ -167,7 +167,7 @@
     'toggle_visibility': 'Modificar la Visibilidad',
     'remote_options': 'Opciones Remotas',
     'history_summary': 'Resumen de Historial',
-    'comment_summary': 'Resumen de Comentario',
+    'comment_summary': 'Comentarios',
     'zoom_world': 'Regresar a Mapa Mundial',
     'legend_title': 'Descripcion',
     'toggle_legend': 'Modificar la Descripcion',
@@ -354,7 +354,9 @@
     'measure_area' : 'Área',
     'measure_line' : 'Longitud',
     'measure_stop' : 'Deja de medir',
-    'measure_units' : 'Unidades'
+    'measure_units' : 'Unidades',
+    'comment_time' : 'Submission Date',
+    'comment_title' : 'Comment Title'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);
