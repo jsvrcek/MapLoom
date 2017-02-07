@@ -15,6 +15,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">{{'cancel_btn' | translate}}</button>
     <button type="button" class="btn btn-primary" ng-click="onSearch()">{{'summarize_btn' | translate}}</button>
-    <button type="button" class="btn btn-danger pull-left" ng-click="exportCSV()"><i class="glyphicon glyphicon-download-alt"></i> {{'export_csv' | translate}}</button>
+    <!-- TODO: Remove disabled class once export is working-->
+    <button type="button" class="btn btn-danger pull-left disabled" ng-click="exportCSV()"><i class="glyphicon glyphicon-download-alt"></i> {{'export_csv' | translate}}</button>
   </div>
 </div>

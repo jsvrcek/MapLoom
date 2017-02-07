@@ -3,7 +3,7 @@
   var module = angular.module('loom_comment_search_directive', []);
 
   module.directive('loomCommentSearch',
-      function($rootScope, historyService, $translate, geogigService, diffService,
+      function($rootScope, commentModerationService, $translate,
                pulldownService, dialogService, $window) {
         return {
           templateUrl: 'commentmoderation/partial/commentsearch.tpl.html',
@@ -42,8 +42,17 @@
               scope.isLoading = true;
               var startTime = new Date(scope.startDate[0]).getTime();
               var endTime = new Date(scope.endDate[0]).getTime();
-              //TODO: Remove
-              console.log('Searching between', startTime, endTime);
+              commentModerationService.timeSearch(startTime, endTime).then(function(resp) {
+                //TODO: Check to make sure response has a length > 0
+                // commentModerationService.setTitle($translate.instant('summary_of_comments'));
+                pulldownService.showDiffPanel();
+                scope.cancel();
+              }, function(resp) {
+                //TODO: Fill in translation for comment unknown error
+                dialogService.error($translate.instant('error'),
+                    $translate.instant('comment_unknown_error'), [$translate.instant('btn_ok')]);
+                scope.isLoading = false;
+              });
             };
 
             //TODO: Make sure this works

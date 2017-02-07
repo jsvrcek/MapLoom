@@ -76,8 +76,20 @@
       }
     ];
 
-    this.$get = function($translate) {
+    var log = this.log;
+
+    this.$get = function($translate, $q) {
       this.title = $translate.instant('comment_summary');
+
+
+      //TODO: Replace with http call
+      this.timeSearch = function(startTime, endTime) {
+        var defer = $q.defer();
+        defer.resolve(log);
+        return defer.promise;
+      };
+
+
       return this;
     };
 
