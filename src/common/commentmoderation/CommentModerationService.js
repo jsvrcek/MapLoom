@@ -79,7 +79,8 @@
     var log = this.log;
 
     this.$get = function($translate, $q) {
-      this.title = $translate.instant('comment_summary');
+      this.title = $translate.instant('comments');
+      this.summaryMode = false;
 
 
       //TODO: Replace with http call
@@ -87,6 +88,16 @@
         var defer = $q.defer();
         defer.resolve(log);
         return defer.promise;
+      };
+
+      this.enableSummaryMode = function() {
+        this.summaryMode = true;
+        this.title = $translate.instant('comment_summary');
+      };
+
+      this.enableLatestMode = function() {
+        this.summaryMode = false;
+        this.title = $translate.instant('comments');
       };
 
 

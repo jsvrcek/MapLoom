@@ -264,9 +264,10 @@
                  data-target="#comment-moderation-panel">
               <span class="ellipsis pulldown-menu-title">{{title}}</span>
 
-              <!-- TODO: What should the x button do here? -->
-              <!--<div stop-event='click' ng-click="clearHistory()"-->
-                   <!--class="glyphicon glyphicon-remove pull-right panel-header-button"></div>-->
+              <!-- TODO: X button clears summary, sets title back to latest comments -->
+              <!-- TODO: NgShow only if we are in summary mode -->
+              <div stop-event='click' ng-click="commentModerationService.enableLatestMode()"
+                   class="glyphicon glyphicon-remove pull-right panel-header-button disabled"></div>
               <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#commentSearchWindow')"
                    tooltip-placement="top" tooltip="{{'comment_summary' | translate}}" tooltip-append-to-body="true"
                    class="glyphicon glyphicon-list-alt pull-right panel-header-button"></div>

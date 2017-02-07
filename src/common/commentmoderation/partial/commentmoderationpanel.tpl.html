@@ -1,6 +1,6 @@
 <div>
-  <div class="comment-moderation-scroll-pane">
-    <ul class="list-group">
+  <div class="comment-moderation-scroll-pane" ng-switch="summaryMode">
+    <ul class="list-group" ng-switch-default>
       <!--TODO: Might move limit and ordering into service/endpoint -->
       <li class="list-group-item loom-comment-popover" ng-repeat="comment in log | orderBy: 'submitDate' : true | limitTo: 5" ng-click="commentClicked(commit)">
         <div ng-if="isLoading(comment)" class="diff-loading loom-loading" spinner-hidden="false"></div>
@@ -14,6 +14,9 @@
       </li>
       <li class="comment-moderation-last-list-item">
       </li>
+    </ul>
+    <ul ng-switch-when="true">
+
     </ul>
   </div>
 </div>

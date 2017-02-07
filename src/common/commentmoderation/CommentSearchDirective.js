@@ -43,10 +43,16 @@
               var startTime = new Date(scope.startDate[0]).getTime();
               var endTime = new Date(scope.endDate[0]).getTime();
               commentModerationService.timeSearch(startTime, endTime).then(function(resp) {
-                //TODO: Check to make sure response has a length > 0
-                // commentModerationService.setTitle($translate.instant('summary_of_comments'));
-                pulldownService.showDiffPanel();
-                scope.cancel();
+                if (resp.length === 0) {
+                  //TODO: Check to make sure translation is there
+                  dialogService.open($translate.instant('comments'),
+                      $translate.instant('no_comments_in_time_range'), [$translate.instant('btn_ok')]);
+                  scope.isLoading = false;
+                } else {
+                  // commentModerationService.setTitle($translate.instant('summary_of_comments'));
+                  commentModerationService.enableSummaryMode();
+                  scope.cancel();
+                }
               }, function(resp) {
                 //TODO: Fill in translation for comment unknown error
                 dialogService.error($translate.instant('error'),

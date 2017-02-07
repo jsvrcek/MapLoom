@@ -21,6 +21,7 @@
     this.layersPanel = new PulldownPanel(true, true);
     this.syncPanel = new PulldownPanel(true, false);
     this.historyPanel = new PulldownPanel(true, false);
+    this.commentPanel = new PulldownPanel(true, false);
     this.toggleEnabled = true;
     this.addLayers = true;
     this.serversLoading = false;
@@ -40,6 +41,7 @@
       this.notificationsPanel.visible = false;
       this.layersPanel.visible = true;
       this.syncPanel.visible = false;
+      this.commentPanel.visible = false;
       this.historyPanel.visible = false;
       this.addLayers = false;
       rootScope_.$broadcast('conflict_mode');
@@ -53,6 +55,7 @@
       this.layersPanel.visible = true;
       this.syncPanel.visible = true;
       this.historyPanel.visible = true;
+      this.commentPanel.visible = true;
       this.addLayers = true;
       rootScope_.$broadcast('default_mode');
       this.apply();
@@ -76,6 +79,12 @@
         $('#layer-manager-panel').collapse('show');
       }, 1);
     };
+    this.showCommentPanel = function() {
+      timeout_(function() {
+        $('#comment-moderation-panel').collapse('show');
+      }, 1);
+    };
+
   });
 
 }());

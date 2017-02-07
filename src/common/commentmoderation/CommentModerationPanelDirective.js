@@ -38,19 +38,21 @@
                 },1);
               }
               scope.log = commentModerationService.log;
+              scope.title = commentModerationService.title;
+              scope.summaryMode = commentModerationService.summaryMode;
               scope.commentModerationService = commentModerationService;
             }
 
 
             scope.commentClicked = function(comment) {
-              //TODO: This needs to show the details in a popup to the right
-              $('.loom-comment-popover').popover('hide');
+              // $('.loom-comment-popover').popover('hide');
               // pulldownService.showDiffPanel();
             };
 
             updateVariables();
 
             scope.$watch('commentModerationService.log', updateVariables, true);
+            scope.$watch('commentModerationService.summaryMode', updateVariables, true);
           }
         };
       });
