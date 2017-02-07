@@ -2,7 +2,6 @@
   var module = angular.module('loom_comment_moderation_service', []);
 
   module.provider('commentModerationService', function() {
-    this.title = 'Comment Moderation';
 
     this.log = [
       {
@@ -77,7 +76,8 @@
       }
     ];
 
-    this.$get = function() {
+    this.$get = function($translate) {
+      this.title = $translate.instant('comment_summary');
       return this;
     };
 

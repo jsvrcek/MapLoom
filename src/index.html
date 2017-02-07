@@ -264,9 +264,10 @@
                  data-target="#comment-moderation-panel">
               <span class="ellipsis pulldown-menu-title">{{title}}</span>
 
+              <!-- TODO: What should the x button do here? -->
               <!--<div stop-event='click' ng-click="clearHistory()"-->
                    <!--class="glyphicon glyphicon-remove pull-right panel-header-button"></div>-->
-              <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#commentModerationWindow')"
+              <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#commentSearchWindow')"
                    tooltip-placement="top" tooltip="{{'comment_summary' | translate}}" tooltip-append-to-body="true"
                    class="glyphicon glyphicon-list-alt pull-right panel-header-button"></div>
             </div>
@@ -324,6 +325,10 @@
 </div>
 <div loom-modal id="historyDiffWindow" modal-title="{{'select_date_range' | translate}}" close-button="false">
   <div loom-history-diff id="historyDiff">
+  </div>
+</div>
+<div loom-modal id="commentSearchWindow" modal-title="{{'select_date_range' | translate}}" close-button="false">
+  <div loom-comment-search id="commentSearch">
   </div>
 </div>
 <div loom-modal id="generate-notification-dialog" modal-title="{{'select_start_time' | translate}}" close-button="false">
