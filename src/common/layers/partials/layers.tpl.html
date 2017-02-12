@@ -12,7 +12,7 @@
         <div class="layer-buttons">
           <span ng-click="featureManagerService.startFeatureInsert(layer)" tooltip-append-to-body="true"
                 tooltip-placement="top" tooltip="{{'add_feature' | translate}}"
-                ng-show="layer.get('metadata').editable && !layer.get('metadata').name.includes('station_point')" stop-event="click mousedown" class="btn btn-xs btn-default"
+                ng-show="layer.get('metadata').editable && !layer.get('metadata').name.toLowerCase().includes('subway_station')" stop-event="click mousedown" class="btn btn-xs btn-default"
                 ng-disabled="(!layer.get('visible') || !layer.get('metadata').schema || layer.get('metadata').readOnly)">
             <i class="glyphicon glyphicon-pencil"></i>
           </span>
@@ -37,7 +37,7 @@
               <div class="loom-loading" spinner-radius="16" spinner-hidden="!zooming"></div>
               <i class="glyphicon glyphicon-resize-small"></i>
             </a>
-            <a type="button" ng-click="showTable(layer)" ng-show="layer.get('metadata').editable" && !layer.get('metadata').name.includes('station_point')
+            <a type="button" ng-click="showTable(layer)" ng-show="layer.get('metadata').editable && !layer.get('metadata').name.toLowerCase().includes('subway_station')"
                class="btn btn-sm btn-default" tooltip-append-to-body="true"
                tooltip-placement="top" tooltip="{{'show_table' | translate}}">
               <div class="loom-loading" spinner-radius="16" spinner-hidden="!isLoadingTable(layer)"></div>

@@ -50,7 +50,12 @@
         endif %
       }
     ,
-    admin: {% if user.is_authenticated %} "{{ user.is_superuser }}" {% else %} undefined {% endif %},
+    admin: {% 
+      if user.is_authenticated %} 
+        "{{ user.is_superuser }}".toLowerCase() === "true" ? true : false 
+      {% else %} 
+        undefined 
+      {% endif %},
       userprofilename: {%
         if user.is_authenticated %}
         "{{ user.get_full_name }}"
