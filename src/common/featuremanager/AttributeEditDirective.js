@@ -29,13 +29,13 @@
                       if (featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')) {
                         switch (prop[1]) {
                           case '1':
-                            prop.initial = '1 - Physically Protected Path';
+                            prop.initial = '1 - Protected Bicycle Path';
                             break;
                           case '2':
-                            prop.initial = '2 - Bike Lane';
+                            prop.initial = '2 - Bicycle Lane';
                             break;
                           case '3':
-                            prop.initial = '3 - Shared Lane';
+                            prop.initial = '3 - Shared Route';
                             break;
                           case '4':
                             prop.initial = '4 - Link';

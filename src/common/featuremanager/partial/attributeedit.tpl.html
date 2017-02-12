@@ -55,9 +55,9 @@
                 </li>
                 <li ng-repeat="enum in prop.enum">
                   <a ng-click="selectValue(prop, $index)" ng-if="!featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">{{enum._value}}</a>
-                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 1">1 - Physically Protected Path</a>
-                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 2">2 - Bike Lane</a>
-                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 3">3 - Shared Lane</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 1">1 - Protected Bicycle Path</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 2">2 - Bicycle Lane</a>
+                  <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 3">3 - Shared Route</a>
                   <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 4">4 - Link</a>
                   <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 7">7 - Stairs</a>
                 </li>
