@@ -26,13 +26,13 @@
             };
 
             var content = '<div class="popover-label">' + $translate.instant('author_name') + ':</div>' +
-                '<div class="popover-value">' + safeName(scope.comment.properties.username) + '</div>' +
+                '<div class="popover-value">' + safeName(scope.comment.get('username')) + '</div>' +
                 '<div class="popover-label">' + $translate.instant('comment_time') + ':</div>' +
-                '<div class="popover-value">' + prettyTime(scope.comment.properties.submit_date_time) + '</div>' +
+                '<div class="popover-value">' + prettyTime(scope.comment.get('submit_date_time')) + '</div>' +
                 '<div class="popover-label">' + $translate.instant('comment_title') + ':</div>' +
-                '<div class="popover-value">' + scope.comment.properties.title + '</div>' +
+                '<div class="popover-value">' + scope.comment.get('title') + '</div>' +
                 '<div class="popover-label">' + $translate.instant('message') + ':</div>' +
-                '<div class="popover-value">' + scope.comment.properties.message + '</div>';
+                '<div class="popover-value">' + scope.comment.get('message') + '</div>';
 
             element.popover({
               trigger: 'manual',
@@ -40,7 +40,7 @@
               html: true,
               content: content,
               container: 'body',
-              title: $translate.instant('id') + ': ' + scope.comment.id
+              title: $translate.instant('id') + ': ' + scope.comment.id_
             });
 
             element.mouseenter(function() {

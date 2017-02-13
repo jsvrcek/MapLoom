@@ -51,7 +51,7 @@
 
             updateVariables();
 
-            scope.$watch('commentModerationService.log', updateVariables, true);
+            scope.$watch('commentModerationService.updateCount', updateVariables, true);
             scope.$watch('commentModerationService.summaryMode', updateVariables, true);
           }
         };

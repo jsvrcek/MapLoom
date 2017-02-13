@@ -6,19 +6,26 @@
     this.log = [];
 
     var log = this.log;
+    this.updateCount = 0;
 
     this.$get = function($translate, $q, $http, mapService) {
       this.title = $translate.instant('comments');
       this.summaryMode = false;
 
-      //TODO: Set limit to 5
-      $http({method: 'GET', url: '/maps/' + mapService.id + '/comments'}).then(function(resp) {
-        for (var i = 0; i < resp.data.features.length; ++i) {
-          resp.data.features[i].geometry = JSON.parse(resp.data.features[i].geometry);
-        }
-        this.log = resp.data;
+      this.vectorSource = new ol.source.Vector();
+      mapService.map.once('postrender', function(evt) {
+        mapService.map.addLayer(new ol.layer.Vector({source: this.vectorSource, title: 'Comments'}));
       }.bind(this));
 
+      //TODO: Run check to see if comments are enabled for this map
+      console.log('MapService', mapService);
+      // TODO: Set limit to 5
+      $http({method: 'GET', url: '/maps/' + mapService.id + '/comments'}).then(function(resp) {
+        log.length = 0;
+        log.push.apply(log, new ol.format.GeoJSON().readFeatures(resp.data));
+        ++this.updateCount;
+        this.vectorSource.addFeatures(this.log);
+      }.bind(this));
 
       //TODO: Replace with http call
       this.timeSearch = function(startTime, endTime) {
