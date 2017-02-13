@@ -39,9 +39,25 @@
             };
 
             scope.onSearch = function() {
+              //We need to drop the milliseconds as python expects a different format
+              function convertDateToISO(date) {
+                function pad(number) {
+                  if (number < 10) {
+                    return '0' + number;
+                  }
+                  return number;
+                }
+                return date.getUTCFullYear() +
+                    '-' + pad(date.getUTCMonth() + 1) +
+                    '-' + pad(date.getUTCDate()) +
+                    'T' + pad(date.getUTCHours()) +
+                    ':' + pad(date.getUTCMinutes()) +
+                    ':' + pad(date.getUTCSeconds()) +
+                    'UTC';
+              }
               scope.isLoading = true;
-              var startTime = new Date(scope.startDate[0]).getTime();
-              var endTime = new Date(scope.endDate[0]).getTime();
+              var startTime = convertDateToISO(new Date(scope.startDate[0]));
+              var endTime = convertDateToISO(new Date(scope.endDate[0]));
               commentModerationService.timeSearch(startTime, endTime).then(function(resp) {
                 if (resp.length === 0) {
                   //TODO: Check to make sure translation is there
@@ -49,7 +65,6 @@
                       $translate.instant('no_comments_in_time_range'), [$translate.instant('btn_ok')]);
                   scope.isLoading = false;
                 } else {
-                  // commentModerationService.setTitle($translate.instant('summary_of_comments'));
                   commentModerationService.enableSummaryMode();
                   scope.cancel();
                 }

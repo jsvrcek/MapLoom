@@ -14,11 +14,11 @@
 
       this.vectorSource = new ol.source.Vector();
       mapService.map.once('postrender', function(evt) {
-        mapService.map.addLayer(new ol.layer.Vector({source: this.vectorSource, title: 'Comments'}));
+        //TODO: Run check to see if comments are enabled for this map
+        mapService.map.addLayer(new ol.layer.Vector({source: this.vectorSource, metadata: {
+          title: 'Comments', uniqueID: 'comments', editable: false}}));
       }.bind(this));
 
-      //TODO: Run check to see if comments are enabled for this map
-      console.log('MapService', mapService);
       // TODO: Set limit to 5
       $http({method: 'GET', url: '/maps/' + mapService.id + '/comments'}).then(function(resp) {
         log.length = 0;
@@ -29,9 +29,10 @@
 
       //TODO: Replace with http call
       this.timeSearch = function(startTime, endTime) {
-        var defer = $q.defer();
-        defer.resolve(log);
-        return defer.promise;
+        return $http({method: 'GET', url: '/maps/' + mapService.id + '/comments?start_date=' + startTime +
+              '&end_date=' + endTime}).then(function(resp) {
+          return new ol.format.GeoJSON().readFeatures(resp.data);
+        });
       };
 
       this.enableSummaryMode = function() {
