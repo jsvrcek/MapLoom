@@ -1,13 +1,12 @@
 <div>
   <div class="comment-moderation-scroll-pane" ng-switch="summaryMode">
-    <ul class="list-group" ng-switch-default>
-      <!--TODO: Might move limit and ordering into service/endpoint -->
-      <li class="list-group-item loom-comment-popover" ng-repeat="comment in log | orderBy: 'submitDate' : true | limitTo: 5" ng-click="commentClicked(commit)">
+    <ul class="list-group" ng-switch-when="false">
+      <li class="list-group-item loom-comment-popover" ng-repeat="comment in log.features" ng-click="commentClicked(commit)">
         <div ng-if="isLoading(comment)" class="diff-loading loom-loading" spinner-hidden="false"></div>
-        <div class="comment-summary"  ng-class="comment.status">
+        <div class="comment-summary"  ng-class="comment.properties.status">
         </div>
-        <div class="comment-author-name ellipsis">{{comment.username || 'anonymous' | translate}}</div>
-        <div class="comment-submit-time ellipsis">{{comment.submitDate | date: 'MM/dd/yyyy @ h:mm a'}}</div>
+        <div class="comment-author-name ellipsis">{{comment.properties.username || 'anonymous' | translate}}</div>
+        <div class="comment-submit-time ellipsis">{{comment.properties.submit_date_time | date: 'MM/dd/yyyy @ h:mm a'}}</div>
       </li>
       <li ng-if="commentModerationService.nextPage" class="list-group-item">
         <div class="comment-moderation-loading loom-loading" spinner-hidden="false"></div>
@@ -15,8 +14,27 @@
       <li class="comment-moderation-last-list-item">
       </li>
     </ul>
-    <ul ng-switch-when="true">
-
+    <ul class="list-group comment-summary-mode" ng-switch-when="true">
+      <li class="list-group-item comment-summary-rollup">
+          <div>
+            <!--TODO: Use aggregated numbers -->
+              <span class="approved-comments col-md-4"> <div class="glyphicon glyphicon-plus-sign"></div> 1000 </span>
+              <span class="pending-comments col-md-4">  <div class="glyphicon glyphicon-edit"></div> 1000 </span>
+              <span class="rejected-comments col-md-4"> <div class="glyphicon glyphicon-minus-sign"></div> 1000 </span>
+          </div>
+      </li>
+      <li class="list-group-item loom-comment-popover" ng-repeat="comment in log.features" ng-click="commentClicked(commit)">
+          <div ng-if="isLoading(comment)" class="diff-loading loom-loading" spinner-hidden="false"></div>
+          <span class="comments-status-button glyphicon"  ng-class="{'glyphicon-plus-sign' : comment.status === 'approved', 'glyphicon-edit' : comment.status === 'pending', 'glyphicon-minus-sign' : comment.status === 'rejected'}"></span>
+          <span class="ellipsis">{{comment.properties.title}}</span>
+          <span class="zoom-to-data"></span>
+          <span class="view-details"></span>
+      </li>
+      <li ng-if="commentModerationService.nextPage" class="list-group-item">
+          <div class="comment-moderation-loading loom-loading" spinner-hidden="false"></div>
+      </li>
+      <li class="comment-moderation-last-list-item">
+      </li>
     </ul>
   </div>
 </div>

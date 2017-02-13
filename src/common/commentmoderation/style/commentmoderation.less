@@ -1,24 +1,38 @@
-.comment-moderation-scroll-pane {
-  max-height: 300px;
-  overflow-y: auto;
+#comment-moderation-panel {
+  .comment-moderation-scroll-pane {
+    max-height: 300px;
+    overflow-y: auto;
 
-  .comment-moderation-loading .loading-container {
-    background-color: inherit;
-  }
+    .comment-moderation-loading .loading-container {
+      background-color: inherit;
+    }
 
-  .diff-loading .loading-container {
-    background-color: @loadingBackgroundColor;
-  }
+    .diff-loading .loading-container {
+      background-color: @loadingBackgroundColor;
+    }
 
-  .list-group {
-    overflow-y: hidden;
-  }
-  .list-group-item {
-    height: 40px;
-  }
+    .list-group {
+      overflow-y: hidden;
+    }
+    .list-group-item {
+      height: 40px;
+    }
 
-  .comment-moderation-last-list-item {
-    display: none;
+    .comment-moderation-last-list-item {
+      display: none;
+    }
+
+    .comment-summary-mode {
+      .glyphicon-plus-sign {
+        color: @addColor;
+      }
+      .glyphicon-edit {
+        color: @modifyColor;
+      }
+      .glyphicon-minus-sign {
+        color: @deleteColor;
+      }
+    }
   }
 }
 
@@ -39,13 +53,13 @@
   -moz-box-shadow: none;
   box-shadow: none;
 
-  &.approved {
+  &.Approved {
     background-color: @addColor;
   }
-  &.rejected {
+  &.Rejected {
     background-color: @deleteColor;
   }
-  &.pending {
+  &.Unapproved {
     background-color: @modifyColor;
   }
 }

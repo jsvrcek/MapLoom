@@ -26,13 +26,13 @@
             };
 
             var content = '<div class="popover-label">' + $translate.instant('author_name') + ':</div>' +
-                '<div class="popover-value">' + safeName(scope.comment.username) + '</div>' +
+                '<div class="popover-value">' + safeName(scope.comment.properties.username) + '</div>' +
                 '<div class="popover-label">' + $translate.instant('comment_time') + ':</div>' +
-                '<div class="popover-value">' + prettyTime(scope.comment.submitDate) + '</div>' +
+                '<div class="popover-value">' + prettyTime(scope.comment.properties.submit_date_time) + '</div>' +
                 '<div class="popover-label">' + $translate.instant('comment_title') + ':</div>' +
-                '<div class="popover-value">' + scope.comment.title + '</div>' +
+                '<div class="popover-value">' + scope.comment.properties.title + '</div>' +
                 '<div class="popover-label">' + $translate.instant('message') + ':</div>' +
-                '<div class="popover-value">' + scope.comment.comment + '</div>';
+                '<div class="popover-value">' + scope.comment.properties.message + '</div>';
 
             element.popover({
               trigger: 'manual',
