@@ -27,7 +27,6 @@
         this.vectorSource.addFeatures(this.log);
       }.bind(this));
 
-      //TODO: Replace with http call
       this.timeSearch = function(startTime, endTime) {
         return $http({method: 'GET', url: '/maps/' + mapService.id + '/comments?start_date=' + startTime +
               '&end_date=' + endTime}).then(function(resp) {

@@ -362,7 +362,9 @@
     'measure_stop' : 'Stop measuring',
     'measure_units' : 'Units',
     'comment_time' : 'Submission Date',
-    'comment_title' : 'Comment Title'
+    'comment_title' : 'Comment Title',
+    'no_comments_in_time_range' : 'No Comments in Time Range',
+    'comment_unknown_error' : 'Unknown Comment Error'
   };
 
   var module = angular.module('loom_translations_en', ['pascalprecht.translate']);

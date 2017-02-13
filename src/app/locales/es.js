@@ -357,7 +357,9 @@
     'measure_stop' : 'Deja de medir',
     'measure_units' : 'Unidades',
     'comment_time' : 'Submission Date',
-    'comment_title' : 'Comment Title'
+    'comment_title' : 'Comment Title',
+    'no_comments_in_time_range' : 'No Comments in Time Range',
+    'comment_unknown_error' : 'Unknown Comment Error'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);
