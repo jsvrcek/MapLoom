@@ -359,7 +359,8 @@
     'comment_time' : 'Submission Date',
     'comment_title' : 'Comment Title',
     'no_comments_in_time_range' : 'No Comments in Time Range',
-    'comment_unknown_error' : 'Unknown Comment Error'
+    'comment_unknown_error' : 'Unknown Comment Error',
+    'add_comment_title' : 'Add a Comment'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);
