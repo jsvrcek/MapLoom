@@ -319,6 +319,11 @@
         if (classifyItem(selectedItem_) === 'feature') {
 
           selectedLayer_ = this.getSelectedItemLayer().layer;
+
+          if (selectedLayer_.get('metadata').name.includes('bikepath') && (!selectedItem_.properties['BikeDir'] || selectedItem_.properties['BikeDir'] === '')) {
+            selectedItem_.properties['BikeDir'] = this.calculateBikeDirection(selectedItem_.properties['toFromcl'], selectedItem_.properties['fromTocl']);
+          }
+
           // note that another service may make a fake feature selection on a layer not in mapservice.
           // checking to make sure it had a geometry before making assumptions about edit layer etc
           if (goog.isDefAndNotNull(selectedItem_.geometry)) {
@@ -1022,6 +1027,18 @@
         }
       }
       return '';
+    };
+
+    this.calculateBikeDirection = function(from, to) {
+      if (from && from.trim() !== '' && to && to.trim() !== '') {
+        return 'Two-way';
+      } else if (from && from.trim() !== '') {
+        return 'With';
+      } else if (to && to.trim() !== '') {
+        return 'Against';
+      } else {
+        return '';
+      }
     };
   });
 

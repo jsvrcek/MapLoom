@@ -330,19 +330,7 @@
                 }
               });
               if (bikeDir) {
-                bikeDir[1] = bikeDirection(from, to);
-              }
-            }
-
-            function bikeDirection(from, to) {
-              if (from && from.trim() !== '' && to && to.trim() !== '') {
-                return 'Two-way';
-              } else if (from && from.trim() !== '') {
-                return 'With';
-              } else if (to && to.trim() !== '') {
-                return 'Against';
-              } else {
-                return '';
+                bikeDir[1] = featureManagerService.calculateBikeDirection(from, to);
               }
             }
           }

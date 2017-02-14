@@ -423,6 +423,11 @@
         service_.totalPages = Math.ceil(service_.totalFeatures / service_.resultsPerPage);
         getRestrictions();
         for (var feat in data.features) {
+          var feature = data.features[feat];
+          if (metadata.name.includes('bikepath') && (!feature.properties['BikeDir'] || feature.properties['BikeDir'] === '')) {
+            feature.properties['BikeDir'] = service_.calculateBikeDirection(feature.properties['toFromcl'], feature.properties['fromTocl']);
+          }
+
           var selectedFeature = false;
           if (goog.isDefAndNotNull(service_.feature) && data.features[feat].id === service_.feature.id) {
             selectedFeature = true;
@@ -478,6 +483,18 @@
         var blob = new Blob_([data.data], { type: data.headers('Content-type') });
         FileSaver_.saveAs(blob, layerName + '.csv');
       });
+    };
+
+    this.calculateBikeDirection = function(from, to) {
+      if (from && from.trim() !== '' && to && to.trim() !== '') {
+        return 'Two-way';
+      } else if (from && from.trim() !== '') {
+        return 'With';
+      } else if (to && to.trim() !== '') {
+        return 'Against';
+      } else {
+        return '';
+      }
     };
   });
 }());
