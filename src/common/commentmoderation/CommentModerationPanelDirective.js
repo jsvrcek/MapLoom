@@ -39,6 +39,22 @@
                 },1);
               }
               scope.log = commentModerationService.log;
+
+              scope.acceptedCount = 0;
+              scope.rejectedCount = 0;
+              scope.unapprovedCount = 0;
+
+              for (var i = 0; i < scope.log.length; ++i) {
+                var status = scope.log[i].get('status');
+                if (status === 'Accepted') {
+                  ++scope.acceptedCount;
+                } else if (status === 'Rejected') {
+                  ++scope.rejectedCount;
+                } else {
+                  ++scope.unapprovedCount;
+                }
+              }
+
               scope.title = commentModerationService.title;
               scope.summaryMode = commentModerationService.summaryMode;
               scope.commentModerationService = commentModerationService;

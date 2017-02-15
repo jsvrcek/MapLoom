@@ -21,10 +21,9 @@
     <ul class="list-group comment-summary-mode" ng-switch-when="true">
       <li class="list-group-item comment-summary-rollup">
           <div>
-            <!--TODO: Use aggregated numbers -->
-              <span class="approved-comments col-md-4"> <div class="glyphicon glyphicon-plus-sign"></div> 1000 </span>
-              <span class="pending-comments col-md-4">  <div class="glyphicon glyphicon-edit"></div> 1000 </span>
-              <span class="rejected-comments col-md-4"> <div class="glyphicon glyphicon-minus-sign"></div> 1000 </span>
+              <span class="approved-comments col-md-4"> <div class="glyphicon glyphicon-plus-sign"></div> {{acceptedCount}} </span>
+              <span class="pending-comments col-md-4">  <div class="glyphicon glyphicon-edit"></div> {{unapprovedCount}} </span>
+              <span class="rejected-comments col-md-4"> <div class="glyphicon glyphicon-minus-sign"></div> {{rejectedCount}} </span>
           </div>
       </li>
       <li class="list-group-item loom-comment-popover" ng-repeat="comment in log" ng-click="commentClicked(comment)">

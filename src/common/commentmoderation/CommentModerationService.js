@@ -35,7 +35,7 @@
         });
       }
 
-      console.log(this.editCommentPermission);
+      console.log(this.editCommentPermission, editCommentPermission);
 
       this.title = $translate.instant('comments');
       this.summaryMode = false;
