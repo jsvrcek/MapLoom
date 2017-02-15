@@ -17,12 +17,13 @@
       });
 
       //TODO: This needs to make a network call
-      this.editCommentPermission = true;
       var commentsEnabled = this.commentsEnabled = true;
+      var editCommentPermission = this.editCommentPermission = true;
 
       function refreshComments() {
         return $http({method: 'GET', url: baseURL}).then(function(resp) {
           log.length = 0;
+          editCommentPermission = resp.data.staff;
           log.push.apply(log, jsonReader.readFeatures(resp.data));
           ++updateCount;
           for (var i = 0; i < log.length; ++i) {
@@ -33,6 +34,8 @@
           vectorSource.addFeatures(log);
         });
       }
+
+      console.log(this.editCommentPermission);
 
       this.title = $translate.instant('comments');
       this.summaryMode = false;
