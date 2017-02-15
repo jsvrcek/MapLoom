@@ -10,8 +10,10 @@
           restrict: 'A',
           templateUrl: 'commentmoderation/partial/commentinfobox.tpl.html',
           link: function(scope) {
+            var overlay = scope.mapService.map.getOverlayById('comment-view-box');
             scope.updateComment = function(status) {
               scope.commentModerationService.modifyComment(scope.item.id_, status);
+              scope.mapService.map.removeOverlay(overlay);
             };
           }
         };

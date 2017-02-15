@@ -50,6 +50,7 @@
           var childScope = $rootScope.$new();
           childScope.item = item;
           childScope.commentModerationService = commentModerationService;
+          childScope.mapService = mapService;
           $compile(mapService.map.getOverlayById('comment-view-box').getElement())(childScope);
           popup.setPosition(item.getGeometry().flatCoordinates);
         } else {
