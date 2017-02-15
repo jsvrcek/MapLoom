@@ -39,13 +39,20 @@
         type: 'Point'
       });
 
+      this.drawControl.on('drawend', function(drawEvt) {
+        this.latestDraw = drawEvt.feature;
+        $('#commentAddWindow').modal('toggle');
+        mapService.map.removeInteraction(this.drawControl);
+        mapService.map.addInteraction(this.selectControl);
+      }.bind(this));
+
       this.selectControl = new ol.interaction.Select({
         condition: ol.events.condition.click
       });
 
       this.selectControl.on('select', function(evt) {
         var item = evt.selected[0];
-        if (item && item.values_) {
+        if (item && item.values_ && item.id_) {
           mapService.map.addOverlay(popup);
           var childScope = $rootScope.$new();
           childScope.item = item;
@@ -63,17 +70,9 @@
         this.vectorLayer = new ol.layer.Vector({source: this.vectorSource, metadata: {
           title: 'Comments', uniqueID: 'comments'}});
         mapService.map.addLayer(this.vectorLayer);
-        // mapService.map.addInteraction(this.drawControl);
         mapService.map.addInteraction(this.selectControl);
 
-        this.drawControl.on('drawend', function(drawEvt) {
-          console.log(drawEvt);
-          this.latestDraw = drawEvt.feature;
-          $('#commentAddWindow').modal('toggle');
-        }.bind(this));
-
         refreshComments();
-
       }.bind(this));
 
       this.timeSearch = function(startTime, endTime) {
@@ -84,7 +83,6 @@
       };
 
       this.addComment = function(title, message, category, location) {
-        console.log(arguments);
         if (location) {
           location.transform(mapService.map.getView().getProjection(), new ol.proj.Projection({code: 'EPSG:4326'}));
           location = new ol.format.GeoJSON().writeGeometry(location);
@@ -132,7 +130,10 @@
         this.title = $translate.instant('comments');
       };
 
-
+      this.addCommentMode = function() {
+        mapService.map.addInteraction(this.drawControl);
+        mapService.map.removeInteraction(this.selectControl);
+      };
 
       commentModerationService = this;
       return this;

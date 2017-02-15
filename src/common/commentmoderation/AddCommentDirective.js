@@ -58,7 +58,10 @@
 
             scope.submit = function() {
               commentModerationService.addComment(scope.model.title, scope.model.message, scope.model.category.value,
-                  scope.latestDraw.getGeometry());
+                  scope.latestDraw.getGeometry()).then(function() {
+                             element.closest('.modal').modal('hide');
+                             scope.isLoading = false;
+              });
             };
 
           }

@@ -264,13 +264,14 @@
                  data-target="#comment-moderation-panel">
               <span class="ellipsis pulldown-menu-title">{{title}}</span>
 
-              <!-- TODO: X button clears summary, sets title back to latest comments -->
-              <!-- TODO: NgShow only if we are in summary mode -->
-              <div stop-event='click' ng-click="commentModerationService.enableLatestMode()"
-                   class="glyphicon glyphicon-remove pull-right panel-header-button disabled"></div>
+              <!--<div stop-event='click' ng-click="commentModerationService.enableLatestMode()"-->
+                   <!--class="glyphicon glyphicon-remove pull-right panel-header-button disabled"></div>-->
               <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#commentSearchWindow')"
                    tooltip-placement="top" tooltip="{{'comment_summary' | translate}}" tooltip-append-to-body="true"
                    class="glyphicon glyphicon-list-alt pull-right panel-header-button"></div>
+              <div stop-event='click' ng-click="commentModerationService.addCommentMode()"
+                   tooltip-placement="top" tooltip="{{'add_comment' | translate}}" tooltip-append-to-body="true"
+                   class="glyphicon glyphicon-plus-sign pull-right panel-header-button"></div>
             </div>
             <div id="comment-moderation-panel" class="panel-collapse collapse pulldown-panel">
               <div loom-comment-moderation-panel></div>

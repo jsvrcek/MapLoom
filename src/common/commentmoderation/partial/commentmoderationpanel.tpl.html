@@ -1,7 +1,7 @@
 <div>
   <div class="comment-moderation-scroll-pane" ng-switch="summaryMode">
     <ul class="list-group" ng-switch-when="false">
-      <li class="list-group-item loom-comment-popover" ng-class="{active: comment.active}" ng-repeat="comment in log" ng-click="commentClicked(comment)">
+      <li class="list-group-item loom-comment-popover" ng-class="{active: comment.active}" ng-repeat="comment in log | limitTo:5" ng-click="commentClicked(comment)">
         <div ng-if="isLoading(comment)" class="diff-loading loom-loading" spinner-hidden="false"></div>
         <div class="comment-summary"  ng-class="comment.get('status')">
         </div>

@@ -45,6 +45,7 @@
             }
 
 
+
             scope.commentClicked = function(comment) {
               if (previousSelection) {
                 previousSelection.active = false;
