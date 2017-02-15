@@ -361,7 +361,13 @@
     'no_comments_in_time_range' : 'No Comments in Time Range',
     'comment_unknown_error' : 'Unknown Comment Error',
     'add_comment_title' : 'Add a Comment',
-    'submit_btn' : 'Submit'
+    'submit_btn' : 'Submit',
+    'author' : 'Author',
+    'status' : 'Status',
+    'approver' : 'Approver',
+    'submit_date_time' : 'Submitted Date',
+    'approved_date_time' : 'Approved Date',
+    'username' : 'Username'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);

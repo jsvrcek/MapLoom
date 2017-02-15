@@ -5,14 +5,19 @@
 
     var log = this.log = [];
     var updateCount = this.updateCount = 0;
+    var commentModerationService;
 
-    this.$get = function($translate, $q, $http, mapService, featureManagerService) {
+    this.$get = function($translate, $q, $http, mapService, $rootScope, $compile) {
       var baseURL = '/maps/' + mapService.id + '/comments';
       var jsonReader = new ol.format.GeoJSON();
       var vectorSource = this.vectorSource = new ol.source.Vector();
+      var popup = new ol.Overlay({
+        element: document.getElementById('comment-view-box'),
+        id: 'comment-view-box'
+      });
 
       function refreshComments() {
-        $http({method: 'GET', url: baseURL}).then(function(resp) {
+        return $http({method: 'GET', url: baseURL}).then(function(resp) {
           log.length = 0;
           log.push.apply(log, jsonReader.readFeatures(resp.data));
           ++updateCount;
@@ -20,6 +25,7 @@
             log[i].getGeometry().transform(new ol.proj.Projection({code: 'EPSG:4326'}),
                 mapService.map.getView().getProjection());
           }
+          vectorSource.clear();
           vectorSource.addFeatures(log);
         });
       }
@@ -39,12 +45,15 @@
 
       this.selectControl.on('select', function(evt) {
         var item = evt.selected[0];
-        console.log('Select EVENT:', evt);
         if (item && item.values_) {
-          item.geometry = item.getGeometry();
-          item.properties = item.values_;
-          featureManagerService.setSelectedLayer(this.vectorLayer);
-          featureManagerService.show(item);
+          mapService.map.addOverlay(popup);
+          var childScope = $rootScope.$new();
+          childScope.item = item;
+          childScope.commentModerationService = commentModerationService;
+          $compile(mapService.map.getOverlayById('comment-view-box').getElement())(childScope);
+          popup.setPosition(item.getGeometry().flatCoordinates);
+        } else {
+          mapService.map.removeOverlay(popup);
         }
       });
 
@@ -53,8 +62,8 @@
         this.vectorLayer = new ol.layer.Vector({source: this.vectorSource, metadata: {
           title: 'Comments', uniqueID: 'comments'}});
         mapService.map.addLayer(this.vectorLayer);
-        mapService.map.addInteraction(this.drawControl);
-        // mapService.map.addInteraction(this.selectControl);
+        // mapService.map.addInteraction(this.drawControl);
+        mapService.map.addInteraction(this.selectControl);
 
         this.drawControl.on('drawend', function(drawEvt) {
           console.log(drawEvt);
@@ -106,6 +115,9 @@
             id: id,
             status: status
           })
+        }).then(function(resp) {
+          refreshComments();
+          return resp;
         });
       };
 
@@ -121,6 +133,7 @@
 
 
 
+      commentModerationService = this;
       return this;
     };
 

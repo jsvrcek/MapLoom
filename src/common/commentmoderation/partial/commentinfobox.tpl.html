@@ -1,0 +1,27 @@
+<div>
+  <div class="info-box-title-row row">
+    <div class="info-box-title ellipsis">
+        {{item.get('title')}}
+    </div>
+  </div>
+
+    <div class="feature-info-box">
+      <span class="info-box-attribute"></span>
+      <span ng-repeat="prop in item.getKeys()">
+        <div ng-if="prop !== 'geometry' && item.get(prop)">
+          <span class="info-box-title">{{prop | translate}}</span>
+          <span class="info-box-attribute">{{item.get(prop)}}</span>
+        </div>
+      </span>
+    </div>
+
+    <div id="feature-info-box-bottom">
+      <div id="feature-info-box-button-group" class="btn-group pull-right">
+        <div class="button-bar">
+          <button class="glyphicon glyphicon-thumbs-up" title="Approve" ng-click="updateComment('Approved')"></button>
+          <button class="glyphicon glyphicon-thumbs-down" title="Reject" ng-click="updateComment('Rejected')"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
