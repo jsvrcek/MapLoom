@@ -366,7 +366,7 @@
     'status' : 'Status',
     'approver' : 'Approver',
     'submit_date_time' : 'Submitted Date',
-    'approved_date_time' : 'Approved Date',
+    'approved_date' : 'Approved Date',
     'username' : 'Username'
   };
 

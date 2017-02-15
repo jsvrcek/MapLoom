@@ -15,6 +15,11 @@
               scope.commentModerationService.modifyComment(scope.item.id_, status);
               scope.mapService.map.removeOverlay(overlay);
             };
+
+            scope.isDate = function(fieldName) {
+              return fieldName === 'submit_date_time' || fieldName === 'approved_date';
+            };
+
           }
         };
       }

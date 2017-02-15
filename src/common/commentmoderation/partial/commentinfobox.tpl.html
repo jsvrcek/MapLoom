@@ -10,7 +10,8 @@
       <span ng-repeat="prop in item.getKeys()">
         <div ng-if="prop !== 'geometry' && item.get(prop)">
           <span class="info-box-title">{{prop | translate}}</span>
-          <span class="info-box-attribute">{{item.get(prop)}}</span>
+          <span ng-if="isDate(prop)" class="info-box-attribute">{{item.get(prop) | date: 'MM/dd/yyyy @ h:mm a'}}</span>
+          <span ng-if="!isDate(prop)" class="info-box-attribute">{{item.get(prop)}}</span>
         </div>
       </span>
     </div>
