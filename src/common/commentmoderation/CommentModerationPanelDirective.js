@@ -11,6 +11,7 @@
             scope.loadingDiff = false;
             var scrollPane = element.find('.comment-moderation-scroll-pane');
             var raw = scrollPane[0];
+            var previousSelection;
 
             scrollPane.bind('scroll', function() {
               if (commentModerationService.nextPage && raw.scrollTop + raw.offsetHeight >= raw.scrollHeight - 47) {
@@ -45,8 +46,16 @@
 
 
             scope.commentClicked = function(comment) {
-              // $('.loom-comment-popover').popover('hide');
-              // pulldownService.showDiffPanel();
+              if (previousSelection) {
+                previousSelection.active = false;
+              }
+              comment.active = true;
+              previousSelection = comment;
+            };
+
+            scope.updateComment = function(status) {
+              previousSelection.set('status', status);
+              commentModerationService.modifyComment(previousSelection.id_, status);
             };
 
             updateVariables();
