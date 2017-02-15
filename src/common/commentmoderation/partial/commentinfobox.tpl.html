@@ -17,7 +17,7 @@
     </div>
 
     <div id="feature-info-box-bottom">
-      <div id="feature-info-box-button-group" class="btn-group pull-right">
+      <div id="feature-info-box-button-group" class="btn-group pull-right" ng-if="commentModerationService.editCommentPermission">
         <div class="button-bar">
           <button class="glyphicon glyphicon-thumbs-up" title="Approve" ng-click="updateComment('Approved')"></button>
           <button class="glyphicon glyphicon-thumbs-down" title="Reject" ng-click="updateComment('Rejected')"></button>

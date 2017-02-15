@@ -258,17 +258,20 @@
             </div>
             <div id="diff-panel" class="loom-diff-panel panel-collapse collapse pulldown-panel">Diffs go here.</div>
           </div>
-            <!--TODO: Ng Show based on whether there are comments or not-->
-          <div class="panel" ng-show="true" ng-controller="LoomCommentModerationController">
+          <div class="panel" ng-if="commentsEnabled" ng-controller="LoomCommentModerationController">
             <div class="panel-heading fixed-height-header" data-toggle="collapse" data-parent="#pulldown-content"
                  data-target="#comment-moderation-panel">
               <span class="ellipsis pulldown-menu-title">{{title}}</span>
 
               <div stop-event='click' ng-click="commentModerationService.enableLatestMode()"
+                   ng-if="commentModerationService.editCommentPermission"
                    class="glyphicon glyphicon-remove pull-right panel-header-button disabled"></div>
+
               <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#commentSearchWindow')"
                    tooltip-placement="top" tooltip="{{'comment_summary' | translate}}" tooltip-append-to-body="true"
+                   ng-if="commentModerationService.editCommentPermission"
                    class="glyphicon glyphicon-list-alt pull-right panel-header-button"></div>
+
               <div stop-event='click' ng-click="commentModerationService.addCommentMode()"
                    tooltip-placement="top" tooltip="{{'add_comment' | translate}}" tooltip-append-to-body="true"
                    class="glyphicon glyphicon-plus-sign pull-right panel-header-button"></div>

@@ -2,7 +2,8 @@
   var module = angular.module('loom_pulldown_controller', []);
 
   module.controller('LoomPulldownController',
-      function($scope, pulldownService, geogigService, diffService, historyService, mapService, configService) {
+      function($scope, pulldownService, geogigService, diffService, historyService, mapService, configService,
+               commentModerationService) {
 
         $('#pulldown-content').on('show.bs.collapse', function(e) {
           $('#pulldown-content .in').not($(e.target).parents()).collapse('hide');
@@ -14,6 +15,7 @@
           $scope.notificationsPanel = pulldownService.notificationsPanel.getVisible();
           $scope.layersPanel = pulldownService.layersPanel.getVisible();
           $scope.syncPanel = pulldownService.syncPanel.getVisible();
+          $scope.commentsEnabled = commentModerationService.commentsEnabled;
           $scope.mapService = mapService;
           $scope.configService = configService;
           $scope.historyPanel = pulldownService.historyPanel.getVisible();

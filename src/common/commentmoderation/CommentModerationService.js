@@ -16,6 +16,10 @@
         id: 'comment-view-box'
       });
 
+      //TODO: This needs to make a network call
+      this.editCommentPermission = true;
+      var commentsEnabled = this.commentsEnabled = true;
+
       function refreshComments() {
         return $http({method: 'GET', url: baseURL}).then(function(resp) {
           log.length = 0;
@@ -66,13 +70,13 @@
       });
 
       mapService.map.once('postrender', function() {
-        //TODO: Run check to see if comments are enabled for this map
-        this.vectorLayer = new ol.layer.Vector({source: this.vectorSource, metadata: {
-          title: 'Comments', uniqueID: 'comments'}});
-        mapService.map.addLayer(this.vectorLayer);
-        mapService.map.addInteraction(this.selectControl);
-
-        refreshComments();
+        if (commentsEnabled) {
+          this.vectorLayer = new ol.layer.Vector({source: this.vectorSource, metadata: {
+            title: 'Comments', uniqueID: 'comments'}});
+          mapService.map.addLayer(this.vectorLayer);
+          mapService.map.addInteraction(this.selectControl);
+          refreshComments();
+        }
       }.bind(this));
 
       this.timeSearch = function(startTime, endTime) {
