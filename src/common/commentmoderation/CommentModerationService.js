@@ -89,6 +89,10 @@
         });
       };
 
+      this.csvExport = function(startTime, endTime) {
+        return baseURL + '?csv=True&start_date=' + startTime + '&end_date=' + endTime;
+      };
+
       this.addComment = function(title, message, category, location) {
         if (location) {
           location.transform(mapService.map.getView().getProjection(), new ol.proj.Projection({code: 'EPSG:4326'}));

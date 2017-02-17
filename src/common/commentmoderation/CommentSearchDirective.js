@@ -14,6 +14,23 @@
             scope.contentHidden = true;
             scope.isLoading = false;
 
+            //We need to drop the milliseconds as python expects a different format
+            function convertDateToISO(date) {
+              function pad(number) {
+                if (number < 10) {
+                  return '0' + number;
+                }
+                return number;
+              }
+              return date.getUTCFullYear() +
+                  '-' + pad(date.getUTCMonth() + 1) +
+                  '-' + pad(date.getUTCDate()) +
+                  'T' + pad(date.getUTCHours()) +
+                  ':' + pad(date.getUTCMinutes()) +
+                  ':' + pad(date.getUTCSeconds()) +
+                  'UTC';
+            }
+
             element.closest('.modal').on('hidden.bs.modal', function(e) {
               if (!scope.$$phase && !$rootScope.$$phase) {
                 scope.$apply(function() {
@@ -39,22 +56,7 @@
             };
 
             scope.onSearch = function() {
-              //We need to drop the milliseconds as python expects a different format
-              function convertDateToISO(date) {
-                function pad(number) {
-                  if (number < 10) {
-                    return '0' + number;
-                  }
-                  return number;
-                }
-                return date.getUTCFullYear() +
-                    '-' + pad(date.getUTCMonth() + 1) +
-                    '-' + pad(date.getUTCDate()) +
-                    'T' + pad(date.getUTCHours()) +
-                    ':' + pad(date.getUTCMinutes()) +
-                    ':' + pad(date.getUTCSeconds()) +
-                    'UTC';
-              }
+
               scope.isLoading = true;
               var startTime = convertDateToISO(new Date(scope.startDate[0]));
               var endTime = convertDateToISO(new Date(scope.endDate[0]));
@@ -74,18 +76,10 @@
               });
             };
 
-            //TODO: Make sure this works
             scope.exportCSV = function() {
-              var repo = geogigService.getRepoById(historyService.layer.get('metadata').repoId);
-              var startTime = new Date(scope.startDate[0]).getTime();
-              var endTime = new Date(scope.endDate[0]).getTime();
-              var untilTime = startTime < endTime ? endTime : startTime;
-              var sinceTime = startTime < endTime ? startTime : endTime;
-              var path = historyService.pathFilter;
-              var until = historyService.layer.get('metadata').branchName;
-              // TODO: Make this work with a proxy once it supports authentication
-              var url = repo.url + '/log.csv?until=' + until + '&path=' +
-                  path + '&sinceTime=' + sinceTime + '&untilTime=' + untilTime + '&summary=true';
+              var startTime = convertDateToISO(new Date(scope.startDate[0]));
+              var endTime = convertDateToISO(new Date(scope.endDate[0]));
+              var url = commentModerationService.csvExport(startTime, endTime);
               $window.open(url);
             };
           }
