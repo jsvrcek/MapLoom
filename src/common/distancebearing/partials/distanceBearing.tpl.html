@@ -1,0 +1,34 @@
+<div id="distance-bearing">
+    <div class="icon">
+
+    </div>
+    <div class="popup" ng-show="display">
+        <div class="title">
+            Distance Bearing Calculator
+            <button class="pull-right" ng-click="toggleVisibility()">X</button>
+        </div>
+        <div>
+            <div>
+                <span>Departure:</span> <input class="location-input"/>
+                <span>Lat:</span> <input class="coordinate-input"/>
+                <span>Lon:</span> <input class="coordinate-input"/>
+            </div>
+            <div>
+                <span>Destination:</span> <input class="location-input"/>
+                <span>Lat:</span> <input class="coordinate-input"/>
+                <span>Lon:</span> <input class="coordinate-input"/>
+            </div>
+        </div>
+        <div>
+            <div>
+                <span>Distance</span><span>5</span><select></select>
+            </div>
+            <div>
+                <span>Bearing</span><span>5</span><select></select>
+            </div>
+        </div>
+        <div>
+            <button ng-click="calculate()">Calculate</button>
+        </div>
+    </div>
+</div>
