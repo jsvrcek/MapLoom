@@ -287,7 +287,8 @@
           ' xsi:schemaLocation="http://www.opengis.net/wfs' +
           ' http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">' +
           '<wfs:Query typeName="' + metadata.name + '"' +
-          ' srsName="' + metadata.projection + '"' +
+          ' srsName="' + 'EPSG:3857' + '"' +
+          //' srsName="' + metadata.projection + '"' +
           '>';
 
       var spatialFilter = '';
@@ -319,6 +320,10 @@
         xml += '<ogc:Filter>';
         xml += spatialFilter;
         xml += '</ogc:Filter>';
+      } else if (bboxStr) {
+        xml += '<ogc:Filter>';
+        xml += bboxStr;
+        xml += '</ogc:Filter>';
       }
 
       xml += '</wfs:Query>' + '</wfs:GetFeature>';
@@ -333,6 +338,7 @@
       var metadata = layer.get('metadata');
       var postURL = metadata.url + '/wfs/WfsDispatcher';
       var xmlData = service_.getFeaturesPostPayloadXML(layer, filters, bbox, resultsPerPage, currentPage);
+
       http_.post(postURL, xmlData, {
         headers: {
           'Content-Type': 'text/xml;charset=utf-8'
@@ -459,7 +465,38 @@
       this.currentPage = 0;
     };
 
+    this.getCSV_Safari = function() {
+      if (confirm('Safari does not support table filters. Proceeding will download all features.')) {
+        var metadata = this.selectedLayer.get('metadata');
+        var url = metadata.url + '/wfs/WfsDispatcher?';
+        var args = {
+          'typename' : metadata.name,
+          'version' : '1.0.0',
+          'service' : 'WFS',
+          'request' : 'GetFeature',
+          'outputFormat' : 'csv'
+        };
+
+        var params = [];
+        for (var key in args) {
+          params.push(key + '=' + encodeURIComponent(args[key]));
+        }
+
+        url += params.join('&');
+
+        window.open(url);
+      }
+    };
+
     this.getCSV = function() {
+      if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+        this.getCSV_Safari();
+        // return a fulfilled promise
+        var deferred = q_.defer();
+        deferred.resolve();
+        return deferred.promise;
+      }
+
       var metadata = this.selectedLayer.get('metadata');
       var postURL = metadata.url + '/wfs/WfsDispatcher';
       var layerName = metadata.name.replace(/:/g, '_');

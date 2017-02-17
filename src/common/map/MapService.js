@@ -182,7 +182,7 @@
 
   module.provider('mapService', function() {
     this.$get = function($translate, serverService, geogigService, $http, pulldownService,
-                         $cookieStore, $cookies, $location, configService, dialogService, tableViewService, $rootScope, $q) {
+                         $cookieStore, $cookies, $location, $browser, configService, dialogService, tableViewService, $rootScope, $q) {
       service_ = this;
       httpService_ = $http;
       configService_ = configService;
@@ -194,6 +194,7 @@
       rootScope_ = $rootScope;
       pulldownService_ = pulldownService;
       tableViewService_ = tableViewService;
+      browserService_ = $browser;
       q_ = $q;
 
       // create map on init so that other components can use map on their init
@@ -212,6 +213,21 @@
       }
 
       this.map = this.createMap();
+
+      this.map.on('moveend', this.trackInHash.bind(this));
+
+      // This needed to go old school because the Angular and jQuery
+      //  mechanisms for reading a parent window's hash do not exist,
+      //  at the time of writing (or at least not in the versions
+      //  used in the application at the time of writing)
+      //
+      var win = getRealWindow();
+      var hash_listener = this.trackWindowHash.bind(this);
+      if (win.addEventListener) {
+        win.addEventListener('hashchange', hash_listener);
+      } else if (win.attachEvent) {
+        win.attachEvent('onhashchange', hash_listener);
+      }
 
       // now that we have a map, lets try to add layers and servers
       service_.loadLayers();
@@ -1013,10 +1029,19 @@
     this.getMapViewParams = function() {
       var params = {
         projection: configService_.configuration.map.projection,
-        center: configService_.configuration.map.center,
-        zoom: configService_.configuration.map.zoom,
         maxZoom: 17
       };
+
+      var default_view = {
+        center: configService_.configuration.map.center,
+        zoom: configService_.configuration.map.zoom
+      };
+
+      // check the window's hash for a default view and use tha
+      //  unless the map already has one defined.
+      var hash_view = getHashView(getRealWindow().location.hash, default_view);
+      goog.object.extend(params, hash_view);
+
       if (configService_.configuration.map.projection === 'EPSG:4326') {
         params['minZoom'] = 3;
       } else {
@@ -1382,6 +1407,127 @@
       }
     };
 
+    /** As maploom is commonly embedded in an iframe,
+     *  this normalizes access to the actual window.
+     *
+     * Inspired by:
+     *  http://stackoverflow.com/questions/935127/how-to-access-parent-iframe-from-javascript
+     *
+     * @return {window} The real container window.
+     */
+    var getRealWindow = function() {
+      if (window.frameElement) {
+        return window.parent;
+      }
+      return window;
+    };
+
+    /** Return a hash string for storing map information.
+     *
+     * @param {ol.Map} The map.
+     *
+     * @return {String} String to set as the hash, cookie, etc.
+     */
+    var getHashString = function(map) {
+      var map_view = map.getView();
+
+      // format map_view into a string
+      var center = map_view.getCenter();
+      // assemble a useful string
+      return 'l=' + center[0] + ',' + center[1] + ',' + map_view.getResolution();
+    };
+
+    /** Update the window's hash with current information about
+     *  the map.
+     *
+     *  Currently, only the map's location (as cx,cy,scale) is tracked.
+     *
+     */
+    this.trackInHash = function() {
+      // get the real parent window
+      var real_window = getRealWindow();
+      // get the new hash setting.
+      var hash_string = getHashString(this.map);
+
+      // the key to this working is to use the 'real window',
+      //  it avoids issues with both angular and WebKit quirks.
+      real_window.location.hash = hash_string;
+    };
+
+    /** Normalize clean up of the hash string.
+     *  there can be odd leading characters from how Angular
+     *  operates.
+     *
+     *  @param {String} hash The hash string to be parsed.
+     *
+     * @return {String} a cleaned version.
+     */
+    var cleanHashString = function(hash) {
+      var new_hash = '' + hash;
+      var first = new_hash.substring(0, 1);
+      if (new_hash.substring(0, 2) == '#/') {
+        new_hash = new_hash.substring(2);
+      } else if (first == '/' || first == '#') {
+        new_hash = new_hash.substring(1);
+      }
+      return new_hash;
+    };
+
+    /** Converts the current #hash string to a ol.View
+     *
+     *  @param {String} hashString   "#" string from a window.
+     *  @param {ol.View} defaultView View that will be used when no hash
+     *                               location can be found.
+     *
+     * @return {Object} With new Center and Resolution elements.
+     */
+    var getHashView = function(hashString, defaultView) {
+      // split the hash into individual components
+      var components = cleanHashString(hashString).split(';');
+
+      for (var i = 0, ii = components.length; i < ii; i++) {
+        // location starts with 'l='
+        if (components[i].substring(0, 2) === 'l=') {
+          var loc = components[i].substring(2).split(',');
+          return {
+            center: [parseFloat(loc[0]), parseFloat(loc[1])],
+            resolution: parseFloat(loc[2])
+          };
+        }
+      }
+
+      return defaultView;
+    };
+
+    /** Check the hash for a change in map state.
+     *
+     */
+    this.trackWindowHash = function(defaultView) {
+      // get the new hash
+      var window_hash = cleanHashString(getRealWindow().location.hash);
+
+      // compare to the new hash.
+      var current_hash = getHashString(this.map);
+
+      // if the hash are different, then do something...
+      if (window_hash != current_hash) {
+        // update the view
+        var map_view = this.map.getView();
+
+        var default_view = {
+          center: map_view.getCenter(),
+          resolution: map_view.getZoom()
+        };
+
+
+        var view = getHashView(window_hash, default_view);
+        if (view.resolution > 0) {
+          map_view.setCenter(view.center);
+          map_view.setResolution(view.resolution);
+        }
+      }
+    };
+
     this.createMap = function() {
       var coordDisplay;
       if (settings.coordinateDisplay === coordinateDisplays.DMS) {
@@ -1500,17 +1646,24 @@
       }
 
       var source = new ol.source.Vector({
-        format: new ol.format.GeoJSON(),
         loader: function(extent, resolution, projection) {
           tableViewService_.getFeaturesWfs(layer, filters, extent).then(function(response) {
-            var features = new ol.format.GeoJSON().readFeatures(response);
-            source.addFeatures(features);
+            try {
+              var features = new ol.format.GeoJSON().readFeatures(response);
+              source.addFeatures(features);
+            } catch (err) {
+              console.log('Error parsing heat map features', err);
+            }
           }, function(reject) {
-            dialogService_.open(translate_.instant('error'), translate_.instant('error'));
+            console.error('Error loading heat map tile');
+            //dialogService_.open(translate_.instant('error'), translate_.instant('error'));
           });
         },
-        strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({ maxZoom: 19 })),
-        projection: 'EPSG:3857'
+        strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({ maxZoom: 19 })) //,
+      });
+
+      source.on('addfeature', function(event) {
+        event.feature.set('weight', 5);
       });
 
       var vector = new ol.layer.Heatmap({
@@ -1519,15 +1672,11 @@
           title: 'heatmap:' + heatmapLayerTitle,
           heatmapLayer: true,
           uniqueID: sha1(heatmapLayerName),
+          bbox: {crs: 'EPSG:3857'},
           editable: false
         },
-        source: source,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'rgba(0, 0, 255, 1.0)',
-            width: 2
-          })
-        })
+        projection: 'EPSG:3857',
+        source: source
       });
 
       this.map.addLayer(vector);
