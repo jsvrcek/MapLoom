@@ -7,13 +7,13 @@
     </div>
     <div class="form-group" ng-repeat="prop in properties"
          ng-init="readonly = (!inserting &&
-                              ((featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') &&
-                                (prop[0] === 'Street' || prop[0] === 'SegmentID' || prop[0] === 'PhysicalID' ||
-                                 prop[0] === 'BikeDir' || prop[0] === 'FromStreet' || prop[0] === 'ToStreet' ||
-                                 prop[0] === 'gid')) ||
-                               (featureManagerService.getSelectedLayer().get('metadata').name.includes('building') &&
-                                (prop[0] !== 'NAME' && prop[0] !== 'CNSTRCT_YR' && prop[0] !== 'NUM_FLOORS'))));
-                  isBikepath = featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">
+                              ((featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('bikepath') &&
+                                (prop[0].toLowerCase() === 'street' || prop[0].toLowerCase() === 'segmentid' || prop[0].toLowerCase() === 'physicalid' ||
+                                 prop[0].toLowerCase() === 'bikedir' || prop[0].toLowerCase() === 'fromstreet' || prop[0].toLowerCase() === 'tostreet' ||
+                                 prop[0].toLowerCase() === 'gid')) ||
+                               (featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('building') &&
+                                (prop[0].toLowerCase() !== 'name' && prop[0].toLowerCase() !== 'cnstrct_yr' && prop[0].toLowerCase() !== 'num_floors'))));
+                  isBikepath = featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('bikepath')">
 
       <div ng-if="featureManagerService.isMediaPropertyName(prop[0])">
         <label class="control-label custom-control-label">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]) }}</label>
@@ -36,9 +36,10 @@
       </div>
 
       <div ng-if="!featureManagerService.isMediaPropertyName(prop[0]) && isAttributeVisible(prop[0])">
-        <label class="control-label custom-control-label" ng-show="(prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]) }}</label>
+        <label class="control-label custom-control-label" ng-show="(!featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('building') && prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]) }}</label>
         <label class="control-label custom-control-label" ng-show="prop[0] === 'fromTocl'">Bike route from {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }} to {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }}</label>
         <label class="control-label custom-control-label" ng-show="prop[0] === 'toFromcl'">Bike route from {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }} to {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }}</label>
+        <label class="control-label custom-control-label" ng-show="featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('building')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]).toUpperCase() }}</label>
         <div ng-switch on="prop.type">
           <datetimepicker ng-switch-when="xsd:dateTime" date-object="prop[1]" default-date="inserting"></datetimepicker>
           <datetimepicker ng-switch-when="xsd:date" date-object="prop[1]" default-date="inserting" time="false"></datetimepicker>

@@ -41,9 +41,10 @@
       <span class="info-box-attribute" ng-show="!isShowingAttributes()" translate="no_attributes"></span>
       <span ng-repeat="prop in featureManagerService.getSelectedItemProperties()">
         <div ng-if="!featureManagerService.isMediaPropertyName(prop[0])" ng-show="isAttributeVisible(prop[0])">
-          <span class="info-box-attribute" ng-show="(prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]) }}</span>
+          <span class="info-box-attribute" ng-show="(!featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('building') && prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]) }}</span>
           <span class="info-box-attribute" ng-show="prop[0] === 'fromTocl'">Bike route from {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }} to {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }} class</span>
           <span class="info-box-attribute" ng-show="prop[0] === 'toFromcl'">Bike route from {{ featureManagerService.getSelectedItemPropertyValue('ToStreet') }} to {{ featureManagerService.getSelectedItemPropertyValue('FromStreet') }} class</span>
+          <span class="info-box-attribute" ng-show="featureManagerService.getSelectedLayer().get('metadata').name.toLowerCase().includes('building')">{{ featureManagerService.getFieldMapping(featureManagerService.getSelectedLayer(), prop[0]).toUpperCase() }}</span>
             <span ng-switch on="isUrl(prop[1])">
               <a ng-switch-when="true" class="info-box-attribute-value" target="_blank" href="{{prop[1]}}">{{prop[1]}}</a>
               <span ng-switch-default class="info-box-attribute-value">{{prop[1]}}</span>
