@@ -63,11 +63,13 @@
 
 
             scope.commentClicked = function(comment) {
-              if (previousSelection) {
-                previousSelection.active = false;
+              if (commentModerationService.editCommentPermission) {
+                if (previousSelection) {
+                  previousSelection.active = false;
+                }
+                comment.active = true;
+                previousSelection = comment;
               }
-              comment.active = true;
-              previousSelection = comment;
             };
 
             scope.updateComment = function(status) {

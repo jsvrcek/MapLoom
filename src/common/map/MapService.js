@@ -200,6 +200,7 @@
       //this.configuration = configService_.configuration;
       this.title = configService_.configuration.about.title;
       this.abstract = configService_.configuration.about.abstract;
+      this.commentsEnabled = false;
       this.id = configService_.configuration.id;
       this.save_method = 'POST';
 
@@ -1136,6 +1137,18 @@
               {value: status}));
         }
       });
+
+      httpService_({
+        method: 'POST',
+        url: '/maps/' + service_.id + '/setComments',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+        data: $.param({
+          enabled: service_.commentsEnabled
+        })
+      });
+
     };
 
     this.loadLayers = function() {

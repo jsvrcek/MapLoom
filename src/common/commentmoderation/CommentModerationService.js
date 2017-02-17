@@ -16,14 +16,15 @@
         id: 'comment-view-box'
       });
 
-      //TODO: This needs to make a network call
-      var commentsEnabled = this.commentsEnabled = true;
-      var editCommentPermission = this.editCommentPermission = true;
+      this.commentsEnabled = false;
+      this.editCommentPermission = false;
 
-      function refreshComments() {
+
+
+      this.refreshComments = function() {
         return $http({method: 'GET', url: baseURL}).then(function(resp) {
           log.length = 0;
-          editCommentPermission = resp.data.staff;
+          this.editCommentPermission = resp.data.staff;
           log.push.apply(log, jsonReader.readFeatures(resp.data));
           ++updateCount;
           for (var i = 0; i < log.length; ++i) {
@@ -32,10 +33,10 @@
           }
           vectorSource.clear();
           vectorSource.addFeatures(log);
-        });
-      }
+        }.bind(this));
+      };
 
-      console.log(this.editCommentPermission, editCommentPermission);
+      console.log(this.editCommentPermission);
 
       this.title = $translate.instant('comments');
       this.summaryMode = false;
@@ -73,13 +74,20 @@
       });
 
       mapService.map.once('postrender', function() {
-        if (commentsEnabled) {
-          this.vectorLayer = new ol.layer.Vector({source: this.vectorSource, metadata: {
-            title: 'Comments', uniqueID: 'comments'}});
-          mapService.map.addLayer(this.vectorLayer);
-          mapService.map.addInteraction(this.selectControl);
-          refreshComments();
-        }
+        $http({
+          method: 'GET',
+          url: '/maps/' + mapService.id + '/setComments'
+        }).then(function(resp) {
+          this.commentsEnabled = resp.data.enabled;
+          mapService.commentsEnabled = resp.data.enabled;
+          if (this.commentsEnabled) {
+            this.vectorLayer = new ol.layer.Vector({source: this.vectorSource, metadata: {
+              title: 'Comments', uniqueID: 'comments'}});
+            mapService.map.addLayer(this.vectorLayer);
+            mapService.map.addInteraction(this.selectControl);
+            this.refreshComments();
+          }
+        }.bind(this));
       }.bind(this));
 
       this.timeSearch = function(startTime, endTime) {
@@ -126,9 +134,9 @@
             status: status
           })
         }).then(function(resp) {
-          refreshComments();
+          this.refreshComments();
           return resp;
-        });
+        }.bind(this));
       };
 
       this.enableSummaryMode = function() {
@@ -144,6 +152,19 @@
       this.addCommentMode = function() {
         mapService.map.addInteraction(this.drawControl);
         mapService.map.removeInteraction(this.selectControl);
+      };
+
+      this.setCommentMode = function(enabled) {
+        return $http({
+          method: 'POST',
+          url: '/maps/' + mapService.id + '/setComments',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          xsrfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          data: $.param({
+            enabled: enabled
+          })
+        });
       };
 
       commentModerationService = this;
