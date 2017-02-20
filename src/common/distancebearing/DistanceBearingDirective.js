@@ -8,6 +8,19 @@
           templateUrl: 'distancebearing/partials/distanceBearing.tpl.html',
           link: function(scope, element) {
             var control = new ol.control.Control({element: element[0]});
+
+            scope.distanceConversionObject = {
+              'm' : 1,
+              'km' : 1 / 1000,
+              'nm' : 1 / 1852,
+              'mi' : 1 / 1609.34
+            };
+
+            scope.bearingConversionObject = {
+              'rad' : Math.PI / 180,
+              '°' : 1
+            };
+
             mapService.map.addControl(control);
             scope.display = true;
 
@@ -22,12 +35,8 @@
                 lat: 58.64389,
                 lon: 3.07
               },
-              distanceUnits: {
-                label: ''
-              },
-              bearingUnits: {
-                label: ''
-              },
+              distanceUnitsMultiplier: scope.distanceConversionObject.nm,
+              bearingUnitsMultiplier: scope.bearingConversionObject['°'],
               //Should be 968.9km
               distance: 0,
               //Should be 0.15916917577

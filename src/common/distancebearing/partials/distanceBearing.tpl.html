@@ -22,10 +22,14 @@
         </div>
         <div>
             <div>
-                <span>Distance</span><span>{{model.distance}}</span><select ng-model="model.distanceUnits"></select>
+                <span>Distance</span><span>{{model.distance * model.distanceUnitsMultiplier}}</span>
+                <select ng-model="model.distanceUnitsMultiplier"
+                        ng-options="key for (key, value) in distanceConversionObject"></select>
             </div>
             <div>
-                <span>Bearing</span><span>{{model.bearing}}</span><select ng-model="model.bearingUnits"></select>
+                <span>Bearing</span><span>{{model.bearing * model.bearingUnitsMultiplier}}</span>
+                <select ng-model="model.bearingUnitsMultiplier"
+                ng-options="key for (key, value) in bearingConversionObject"></select>
             </div>
         </div>
         <div>
