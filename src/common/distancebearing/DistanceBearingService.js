@@ -1,7 +1,7 @@
 (function() {
   var module = angular.module('loom_distance_bearing_service', []);
 
-  module.provider('searchService', function() {
+  module.provider('distanceBearingService', function() {
     var _q;
     var wgs84Sphere = new ol.Sphere(6378137);
 
@@ -20,17 +20,33 @@
       return wgs84Sphere.haversineDistance(startPoint, endPoint);
     };
 
+    function toRadians(num) {
+      return num * Math.PI / 180;
+    }
+
+    function toDegrees(num) {
+      return num * 180 / Math.PI;
+    }
+
     //Returns angle in radians
     this.getBearing = function(startPoint, endPoint) {
-      //Formula for angle in radians is as follows:
-      //p1 l1
-      //difference in latitude
-      var dY = Math.abs(startPoint.lat, endPoint.lat);
-      var atanY = dY * Math.cos(endPoint.lon);
-      var atanX = Math.cos(startPoint.lon) * Math.sin(endPoint.lon) - Math.sin(startPoint.lon) *
-          Math.cos(endPoint.lon) * cos(dY);
+      var startLat = toRadians(startPoint.lat);
+      var startLon = toRadians(startPoint.lon);
+      var endLat = toRadians(endPoint.lat);
+      var endLon = toRadians(endPoint.lon);
+      var λ1 = startLon;
+      var λ2 = endLon;
+      var φ2 = endLat;
+      var φ1 = startLat;
 
-      return Math.atan2(atanY, atanX);
+      var y = Math.sin(λ2 - λ1) * Math.cos(φ2);
+      var x = Math.cos(φ1) * Math.sin(φ2) -
+          Math.sin(φ1) * Math.cos(φ2) * Math.cos(λ2 - λ1);
+      //Does this need to be absolute?
+      var brng = toDegrees(Math.atan2(y, x));
+
+      console.log(brng);
+      return brng;
     };
 
 

@@ -9,22 +9,23 @@
         </div>
         <div>
             <div>
-                <span>Departure:</span> <input class="location-input"/>
-                <span>Lat:</span> <input class="coordinate-input"/>
-                <span>Lon:</span> <input class="coordinate-input"/>
+                <span>Departure:</span> <input class="location-input" ng-model="model.departure.name"/>
+                <!-- TODO: Decimal Degrees vs DMS-->
+                <span>Lat:</span> <input class="coordinate-input" ng-model="model.departure.lat"/>
+                <span>Lon:</span> <input class="coordinate-input" ng-model="model.departure.lon"/>
             </div>
             <div>
-                <span>Destination:</span> <input class="location-input"/>
-                <span>Lat:</span> <input class="coordinate-input"/>
-                <span>Lon:</span> <input class="coordinate-input"/>
+                <span>Destination:</span> <input class="location-input" ng-model="model.destination.name"/>
+                <span>Lat:</span> <input class="coordinate-input" ng-model="model.destination.lat"/>
+                <span>Lon:</span> <input class="coordinate-input" ng-model="model.destination.lon"/>
             </div>
         </div>
         <div>
             <div>
-                <span>Distance</span><span>5</span><select></select>
+                <span>Distance</span><span>{{model.distance}}</span><select ng-model="model.distanceUnits"></select>
             </div>
             <div>
-                <span>Bearing</span><span>5</span><select></select>
+                <span>Bearing</span><span>{{model.bearing}}</span><select ng-model="model.bearingUnits"></select>
             </div>
         </div>
         <div>
