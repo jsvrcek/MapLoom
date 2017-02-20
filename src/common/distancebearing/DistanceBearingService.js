@@ -16,8 +16,15 @@
     };
 
     //Returns distance in meters
+    //Inputs are either ol.geom.Points or objects matching:
+    // {lat: 5, lon: 15} or an array [lon, lat]
     this.getDistance = function(startPoint, endPoint) {
-      return wgs84Sphere.haversineDistance(startPoint, endPoint);
+      var start = convertToPoint(startPoint);
+      var end = convertToPoint(endPoint);
+      var distance = wgs84Sphere.haversineDistance(start, end);
+
+      // console.log(wgs84Sphere.offset(start, distance, toRadians(this.getBearing(startPoint, endPoint))));
+      return distance;
     };
 
     function toRadians(num) {
@@ -28,25 +35,31 @@
       return num * 180 / Math.PI;
     }
 
-    //Returns angle in radians
+    function convertToPoint(point) {
+      if (point.flatCoordinates) {
+        return point.flatCoordinates;
+      } else if (point.length) {
+        return point;
+      }
+      return [point.lon, point.lat];
+    }
+
+    //Returns angle in degrees
+    //Inputs are either ol.geom.Points or objects matching:
+    // {lat: 5, lon: 15} or an array [lon, lat]
     this.getBearing = function(startPoint, endPoint) {
-      var startLat = toRadians(startPoint.lat);
-      var startLon = toRadians(startPoint.lon);
-      var endLat = toRadians(endPoint.lat);
-      var endLon = toRadians(endPoint.lon);
-      var λ1 = startLon;
-      var λ2 = endLon;
-      var φ2 = endLat;
-      var φ1 = startLat;
+      var start = convertToPoint(startPoint);
+      var end = convertToPoint(endPoint);
 
-      var y = Math.sin(λ2 - λ1) * Math.cos(φ2);
-      var x = Math.cos(φ1) * Math.sin(φ2) -
-          Math.sin(φ1) * Math.cos(φ2) * Math.cos(λ2 - λ1);
-      //Does this need to be absolute?
-      var brng = toDegrees(Math.atan2(y, x));
+      var startLat = toRadians(start[1]);
+      var startLon = toRadians(start[0]);
+      var endLat = toRadians(end[1]);
+      var endLon = toRadians(end[0]);
 
-      console.log(brng);
-      return brng;
+      var y = Math.sin(endLon - startLon) * Math.cos(endLat);
+      var x = Math.cos(startLat) * Math.sin(endLat) -
+          Math.sin(startLat) * Math.cos(endLat) * Math.cos(endLon - startLon);
+      return Math.abs(toDegrees(Math.atan2(y, x)));
     };
 
 
