@@ -40,7 +40,16 @@
               //Should be 968.9km
               distance: 0,
               //Should be 0.15916917577
-              bearing: 0
+              bearing: 0,
+              displayOnMap: false
+            };
+
+            scope.showOnMap = function() {
+              if (!scope.model.displayOnMap) {
+                distanceBearingService.clearLine();
+              } else {
+                distanceBearingService.showLine(scope.model.departure, scope.model.destination);
+              }
             };
 
             scope.toggleVisibility = function() {
@@ -52,6 +61,7 @@
                   scope.model.destination);
               scope.model.bearing = distanceBearingService.getBearing(scope.model.departure,
                   scope.model.destination);
+              scope.showOnMap();
             };
           }
         };

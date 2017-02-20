@@ -3,6 +3,7 @@
 
   module.provider('distanceBearingService', function() {
     var _q;
+    var displayedLine;
     var wgs84Sphere = new ol.Sphere(6378137);
 
     this.$get = function($q) {
@@ -19,8 +20,8 @@
     //Inputs are either ol.geom.Points or objects matching:
     // {lat: 5, lon: 15} or an array [lon, lat]
     this.getDistance = function(startPoint, endPoint) {
-      var start = convertToPoint(startPoint);
-      var end = convertToPoint(endPoint);
+      var start = convertToArray(startPoint);
+      var end = convertToArray(endPoint);
       var distance = wgs84Sphere.haversineDistance(start, end);
 
       // console.log(wgs84Sphere.offset(start, distance, toRadians(this.getBearing(startPoint, endPoint))));
@@ -35,7 +36,7 @@
       return num * 180 / Math.PI;
     }
 
-    function convertToPoint(point) {
+    function convertToArray(point) {
       if (point.flatCoordinates) {
         return point.flatCoordinates;
       } else if (point.length) {
@@ -44,12 +45,39 @@
       return [point.lon, point.lat];
     }
 
+    function convertToOlPoint(point) {
+      if (point.flatCoordinates) {
+        return point;
+      } else if (point.length) {
+        return new ol.geom.Point(point);
+      }
+      return new ol.geom.Point([point.lon, point.lat]);
+    }
+
+    this.showLine = function(start, end) {
+      var startPoint = convertToArray(start);
+      var endPoint = convertToArray(end);
+      //TODO: Add to map
+      var newLine = new ol.geom.LineString([startPoint, endPoint]);
+      if (displayedLine) {
+        console.log('remove old line');
+      }
+      displayedLine = newLine;
+      console.log(newLine);
+    };
+
+    this.clearLine = function() {
+      //TODO: Remove from map
+      console.log('clearLine');
+      newLine = undefined;
+    };
+
     //Returns angle in degrees
     //Inputs are either ol.geom.Points or objects matching:
     // {lat: 5, lon: 15} or an array [lon, lat]
     this.getBearing = function(startPoint, endPoint) {
-      var start = convertToPoint(startPoint);
-      var end = convertToPoint(endPoint);
+      var start = convertToArray(startPoint);
+      var end = convertToArray(endPoint);
 
       var startLat = toRadians(start[1]);
       var startLon = toRadians(start[0]);
