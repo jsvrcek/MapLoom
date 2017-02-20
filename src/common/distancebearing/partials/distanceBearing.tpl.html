@@ -1,35 +1,57 @@
 <div id="distance-bearing">
-    <div class="icon">
+
+    <div class="icon"  ng-click="toggleVisibility()">
+        <!--TODO: Set icon and set position-->
 
     </div>
+    <!--TODO: Run all these through translate-->
     <div class="popup" ng-show="display">
-        <div class="title">
-            Distance Bearing Calculator
+        <div class="section">
+            <span class="title">Distance Bearing Calculator</span>
             <button class="pull-right" ng-click="toggleVisibility()">X</button>
         </div>
         <div>
-            <div>
-                <span>Departure:</span> <input class="location-input" ng-model="model.departure.name"/>
+            <div class="section">
+                <div>
+                    <span>Departure:</span> <input class="location-input" ng-model="model.departure.name"/>
+                </div>
                 <!-- TODO: Decimal Degrees vs DMS-->
-                <span>Lat:</span> <input class="coordinate-input" ng-model="model.departure.lat"/>
-                <span>Lon:</span> <input class="coordinate-input" ng-model="model.departure.lon"/>
+                <div>
+                    <span>Latitude:</span> <input class="coordinate-input" ng-model="model.departure.lat"/>
+                </div>
+                <div>
+                    <span>Longitude:</span> <input class="coordinate-input" ng-model="model.departure.lon"/>
+                </div>
             </div>
-            <div>
-                <span>Destination:</span> <input class="location-input" ng-model="model.destination.name"/>
-                <span>Lat:</span> <input class="coordinate-input" ng-model="model.destination.lat"/>
-                <span>Lon:</span> <input class="coordinate-input" ng-model="model.destination.lon"/>
+            <div class="section">
+                <div>
+                    <span>Destination:</span> <input class="location-input" ng-model="model.destination.name"/>
+                </div>
+                <div>
+                    <span>Latitude:</span> <input class="coordinate-input" ng-model="model.destination.lat"/>
+                </div>
+                <div>
+                    <span>Longitude:</span> <input class="coordinate-input" ng-model="model.destination.lon"/>
+                </div>
             </div>
         </div>
         <div>
-            <div>
-                <span>Distance</span><span>{{model.distance * model.distanceUnitsMultiplier}}</span>
-                <select ng-model="model.distanceUnitsMultiplier"
-                        ng-options="key for (key, value) in distanceConversionObject"></select>
+            <div class="section">
+                <span class="title">Distance</span>
+                <div>
+                    <span>{{model.distance * model.distanceUnitsMultiplier | number:2}}</span>
+                    <select ng-model="model.distanceUnitsMultiplier"
+                            ng-options="key for (key, value) in distanceConversionObject"></select>
+                </div>
             </div>
-            <div>
-                <span>Bearing</span><span>{{model.bearing * model.bearingUnitsMultiplier}}</span>
-                <select ng-model="model.bearingUnitsMultiplier"
-                ng-options="key for (key, value) in bearingConversionObject"></select>
+            <div class="section">
+                <span class="title">Bearing</span>
+                <div>
+                    <span>{{model.bearing * model.bearingUnitsMultiplier | number:2}}</span>
+                    <select ng-model="model.bearingUnitsMultiplier"
+                            ng-options="key for (key, value) in bearingConversionObject"></select>
+
+                </div>
             </div>
         </div>
         <div>
