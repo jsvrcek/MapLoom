@@ -70,8 +70,10 @@
               var lastCommitId = '0000000000000000000000000000000000000000';
               if (goog.isDefAndNotNull(commit.parents) && goog.isObject(commit.parents)) {
                 if (goog.isDefAndNotNull(commit.parents.id)) {
-                  if (goog.isArray(commit.parents.id) && goog.isDefAndNotNull(commit.parents.id[0])) {
-                    lastCommitId = commit.parents.id[0];
+                  if (goog.isArray(commit.parents.id)) {
+                    if (commit.parents.id.length > 0) {
+                      lastCommitId = commit.parents.id[0];
+                    }
                   } else {
                     lastCommitId = commit.parents.id;
                   }

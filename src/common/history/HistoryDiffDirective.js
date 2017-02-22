@@ -58,7 +58,9 @@
                   if (goog.isDefAndNotNull(lastCommit.parents) && goog.isObject(lastCommit.parents)) {
                     if (goog.isDefAndNotNull(lastCommit.parents.id)) {
                       if (goog.isArray(lastCommit.parents.id)) {
-                        lastCommitId = lastCommit.parents.id[0];
+                        if (lastCommit.parents.id.length > 0) {
+                          lastCommitId = lastCommit.parents.id[0];
+                        }
                       } else {
                         lastCommitId = lastCommit.parents.id;
                       }
