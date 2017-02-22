@@ -55,6 +55,14 @@
               scope.display = !scope.display;
             };
 
+            scope.retrieveCoordinates = function(loc) {
+              distanceBearingService.search(scope.model[loc].name).then(function(resp) {
+                scope.model[loc].lat = resp.coordinates.lat;
+                scope.model[loc].lon = resp.coordinates.lon;
+                scope.model[loc].name = resp.address;
+              });
+            };
+
             scope.calculate = function() {
               scope.model.distance = distanceBearingService.getDistance(scope.model.departure,
                   scope.model.destination);

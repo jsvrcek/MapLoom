@@ -2,19 +2,24 @@
   var module = angular.module('loom_distance_bearing_service', []);
 
   module.provider('distanceBearingService', function() {
-    var _q, _mapService;
+    var _mapService, _http;
     var wgs84Sphere = new ol.Sphere(6378137);
     var displayLayer, displaySource;
 
-    this.$get = function($q, mapService) {
-      _q = $q;
+    this.$get = function(mapService, $http) {
       _mapService = mapService;
+      _http = $http;
       return this;
     };
 
     this.search = function(searchTerm) {
-      var retVal = _q.defer();
-      return retVal.promise();
+      var url = '/geocode?address=' + searchTerm;
+      return _http({
+        method: 'GET',
+        url: url
+      }).then(function(resp) {
+        return resp.data;
+      });
     };
 
     //Returns distance in meters
