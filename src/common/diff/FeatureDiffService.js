@@ -447,6 +447,11 @@
       diffOptions.path = feature.id;
       panel.active = true;
       geogigService_.command(repoId_, 'featurediff', diffOptions).then(function(response) {
+        // Sort the response by "attributename" to force consistent ordering across "featurediff" calls.
+        _.set(response, 'diff', _.sortBy(response.diff, function(el) {
+          return el.attributename.toLowerCase();
+        }));
+
         forEachArrayish(response.diff, function(item) {
           if (item.geometry !== true) {
             if (!goog.isDefAndNotNull(item.newvalue)) {

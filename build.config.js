@@ -100,7 +100,9 @@ module.exports = {
       'vendor/bootstrap-sortable/Scripts/bootstrap-sortable.js',
       'vendor/angular-xeditable/dist/js/xeditable.min.js',
       'vendor/node-uuid/uuid.js',
-      'vendor/angularjs-slider/dist/rzslider.min.js'
+      'vendor/angularjs-slider/dist/rzslider.min.js',
+
+      'vendor/lodash/lodash.js'
     ],
     css: [
       'vendor/ol3/ol.css',
