@@ -2,12 +2,13 @@
   var module = angular.module('loom_distance_bearing_service', []);
 
   module.provider('distanceBearingService', function() {
-    var _q;
-    var displayedLine;
+    var _q, _mapService;
     var wgs84Sphere = new ol.Sphere(6378137);
+    var displayLayer, displaySource;
 
-    this.$get = function($q) {
+    this.$get = function($q, mapService) {
       _q = $q;
+      _mapService = mapService;
       return this;
     };
 
@@ -57,19 +58,21 @@
     this.showLine = function(start, end) {
       var startPoint = convertToArray(start);
       var endPoint = convertToArray(end);
-      //TODO: Add to map
       var newLine = new ol.geom.LineString([startPoint, endPoint]);
-      if (displayedLine) {
-        console.log('remove old line');
+      if (!displayLayer) {
+        displaySource = new ol.source.Vector({});
+        displayLayer = new ol.layer.Vector({source: displaySource});
+        _mapService.map.addLayer(displayLayer);
       }
-      displayedLine = newLine;
-      console.log(newLine);
+      newLine.transform(ol.proj.get('EPSG:4326'), _mapService.map.getView().getProjection());
+      displaySource.clear();
+      displaySource.addFeature(new ol.Feature(newLine));
     };
 
     this.clearLine = function() {
-      //TODO: Remove from map
-      console.log('clearLine');
-      newLine = undefined;
+      if (displaySource) {
+        displaySource.clear();
+      }
     };
 
     //Returns angle in degrees
@@ -87,7 +90,11 @@
       var y = Math.sin(endLon - startLon) * Math.cos(endLat);
       var x = Math.cos(startLat) * Math.sin(endLat) -
           Math.sin(startLat) * Math.cos(endLat) * Math.cos(endLon - startLon);
-      return Math.abs(toDegrees(Math.atan2(y, x)));
+      var result = toDegrees(Math.atan2(y, x));
+      if (result < 0) {
+        result += 360;
+      }
+      return result;
     };
 
 
