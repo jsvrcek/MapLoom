@@ -358,7 +358,17 @@
     'measure_area' : 'Area',
     'measure_line' : 'Length',
     'measure_stop' : 'Stop measuring',
-    'measure_units' : 'Units'
+    'measure_units' : 'Units',
+    'distance_bearing_calculator' : 'Distance Bearing Calculator',
+    'departure' : 'Departure',
+    'latitude' : 'Latitude',
+    'longitude' : 'Longitude',
+    'destination' : 'Destination',
+    'distance' : 'Distance',
+    'bearing' : 'Bearing',
+    'calculate' : 'Calculate',
+    'display_on_map' : 'Display on Map'
+
   };
 
   var module = angular.module('loom_translations_en', ['pascalprecht.translate']);

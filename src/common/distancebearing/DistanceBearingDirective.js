@@ -22,6 +22,7 @@
             };
 
             mapService.map.addControl(control);
+            //TODO: Default to false
             scope.display = true;
 
             scope.model = {
@@ -37,9 +38,7 @@
               },
               distanceUnitsMultiplier: scope.distanceConversionObject.nm,
               bearingUnitsMultiplier: scope.bearingConversionObject['°'],
-              //Should be 968.9km
               distance: 0,
-              //Should be 0.15916917577
               bearing: 0,
               displayOnMap: false
             };

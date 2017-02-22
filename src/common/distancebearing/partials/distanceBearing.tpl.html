@@ -1,43 +1,42 @@
 <div id="distance-bearing">
 
-    <div class="icon"  ng-click="toggleVisibility()">
-        <!--TODO: Set icon and set position-->
-
-    </div>
-    <!--TODO: Run all these through translate-->
+    <button class="icon" ng-click="toggleVisibility()" tooltip-placement="left" tooltip="{{'distance_bearing_calculator' | translate}}">
+        <!--TODO: Fix the alignment here-->
+        <span class="glyphicon glyphicon-move"></span>
+    </button>
     <div class="popup" ng-show="display">
         <div class="section">
-            <span class="title">Distance Bearing Calculator</span>
+            <span class="title">{{'distance_bearing_calculator' | translate}}</span>
             <button class="pull-right" ng-click="toggleVisibility()">X</button>
         </div>
         <div>
             <div class="section">
                 <div>
-                    <span>Departure:</span> <input class="location-input" ng-model="model.departure.name"/>
+                    <span>{{'departure' | translate}}:</span> <input class="location-input" ng-model="model.departure.name"/>
                 </div>
                 <!-- TODO: Decimal Degrees vs DMS-->
                 <div>
-                    <span>Latitude:</span> <input class="coordinate-input" ng-model="model.departure.lat"/>
+                    <span>{{'latitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.departure.lat"/>
                 </div>
                 <div>
-                    <span>Longitude:</span> <input class="coordinate-input" ng-model="model.departure.lon"/>
+                    <span>{{'longitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.departure.lon"/>
                 </div>
             </div>
             <div class="section">
                 <div>
-                    <span>Destination:</span> <input class="location-input" ng-model="model.destination.name"/>
+                    <span>{{'destination' | translate}}:</span> <input class="location-input" ng-model="model.destination.name"/>
                 </div>
                 <div>
-                    <span>Latitude:</span> <input class="coordinate-input" ng-model="model.destination.lat"/>
+                    <span>{{'latitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.destination.lat"/>
                 </div>
                 <div>
-                    <span>Longitude:</span> <input class="coordinate-input" ng-model="model.destination.lon"/>
+                    <span>{{'longitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.destination.lon"/>
                 </div>
             </div>
         </div>
         <div>
             <div class="section">
-                <span class="title">Distance</span>
+                <span class="title">{{'distance' | translate}}</span>
                 <div>
                     <span>{{model.distance * model.distanceUnitsMultiplier | number:2}}</span>
                     <select ng-model="model.distanceUnitsMultiplier"
@@ -45,7 +44,7 @@
                 </div>
             </div>
             <div class="section">
-                <span class="title">Bearing</span>
+                <span class="title">{{'bearing' | translate}}</span>
                 <div>
                     <span>{{model.bearing * model.bearingUnitsMultiplier | number:2}}</span>
                     <select ng-model="model.bearingUnitsMultiplier"
@@ -55,10 +54,10 @@
             </div>
         </div>
         <div class="section">
-            <input type="checkbox" ng-model="model.displayOnMap" ng-change="showOnMap()"/><span>Display On Map</span>
+            <input type="checkbox" ng-model="model.displayOnMap" ng-change="showOnMap()"/><span>{{'display_on_map' | translate}}</span>
         </div>
         <div>
-            <button ng-click="calculate()">Calculate</button>
+            <button ng-click="calculate()">{{'calculate' | translate}}</button>
         </div>
     </div>
 </div>
