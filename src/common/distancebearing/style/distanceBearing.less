@@ -21,13 +21,22 @@
     width: 300px;
     padding: 10px;
 
-    input.location-input {
-      //width: 30px;
+    .close-icon {
+      height: 18px;
     }
 
-    input.coordinate-input {
-      //width: 30px;
+    .full-name {
+      font-size: 12px;
+      padding: 5px 30px;
+      padding-top: 20px;
     }
+
+    input, .glyphicon-search {
+      //This is to fix an issue where the full name div ends up stealing
+      //the click from the inputs despite not being physically over the input
+      z-index: 1;
+    }
+
     .section {
       padding-bottom: 15px;
       input {
@@ -37,6 +46,7 @@
       }
       .title {
         font-weight: bold;
+        padding-bottom: 5px;
       }
     }
   }

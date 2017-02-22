@@ -7,7 +7,7 @@
     <div class="popup" ng-show="display">
         <div class="section">
             <span class="title">{{'distance_bearing_calculator' | translate}}</span>
-            <button class="pull-right" ng-click="toggleVisibility()">X</button>
+            <button class="pull-right close-icon" ng-click="toggleVisibility()">X</button>
         </div>
         <div>
             <div class="section">
@@ -15,6 +15,11 @@
                     <span class="col-md-6">{{'departure' | translate}}:</span>
                     <input class="location-input col-md-4" ng-model="model.departure.name"/>
                     <span ng-click="retrieveCoordinates('departure')" class="glyphicon glyphicon-search col-md-1"></span>
+                </div>
+                <div ng-show="model.departure.fullName" class="full-name col-md-12">
+                    <span class="col-md-12">
+                        {{model.departure.fullName}}
+                    </span>
                 </div>
                 <!-- TODO: Decimal Degrees vs DMS-->
                 <div class="col-md-12">
@@ -33,6 +38,11 @@
                     <input class="location-input col-md-4" ng-model="model.destination.name"/>
                     <span ng-click="retrieveCoordinates('destination')" class="glyphicon glyphicon-search col-md-1"></span>
                 </div>
+                <div ng-show="model.destination.fullName" class="full-name col-md-12">
+                    <span class="col-md-12">
+                        {{model.destination.fullName}}
+                    </span>
+                </div>
                 <div class="col-md-12">
                     <span class="col-md-6">{{'latitude' | translate}}:</span>
                     <input type="number" class="coordinate-input col-md-6"  max="90" min="-90" ng-model="model.destination.lat"/>
@@ -45,7 +55,7 @@
         </div>
         <div>
             <div class="section">
-                <span class="title">{{'distance' | translate}}</span>
+                <div class="title">{{'distance' | translate}}</div>
                 <div>
                     <span>{{model.distance * model.distanceUnitsMultiplier | number:2}}</span>
                     <select ng-model="model.distanceUnitsMultiplier"
@@ -53,7 +63,7 @@
                 </div>
             </div>
             <div class="section">
-                <span class="title">{{'bearing' | translate}}</span>
+                <div class="title">{{'bearing' | translate}}</div>
                 <div>
                     <span>{{model.bearing * model.bearingUnitsMultiplier | number:2}}</span>
                     <select ng-model="model.bearingUnitsMultiplier"
@@ -63,7 +73,7 @@
             </div>
         </div>
         <div class="section">
-            <input type="checkbox" ng-model="model.displayOnMap" ng-change="showOnMap()"/><span>{{'display_on_map' | translate}}</span>
+            <label><input type="checkbox" ng-model="model.displayOnMap" ng-change="showOnMap()"/> {{'display_on_map' | translate}}</label>
         </div>
         <div>
             <button ng-click="calculate()">{{'calculate' | translate}}</button>

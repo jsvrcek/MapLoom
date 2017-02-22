@@ -22,19 +22,20 @@
             };
 
             mapService.map.addControl(control);
-            //TODO: Default to false
-            scope.display = true;
+            scope.display = false;
 
             scope.model = {
               departure: {
                 name: '',
-                lat: 50.06639,
-                lon: 5.714722
+                fullName: undefined,
+                lat: undefined,
+                lon: undefined
               },
               destination: {
                 name: '',
-                lat: 58.64389,
-                lon: 3.07
+                fullName: undefined,
+                lat: undefined,
+                lon: undefined
               },
               distanceUnitsMultiplier: scope.distanceConversionObject.nm,
               bearingUnitsMultiplier: scope.bearingConversionObject['°'],
@@ -57,9 +58,15 @@
 
             scope.retrieveCoordinates = function(loc) {
               distanceBearingService.search(scope.model[loc].name).then(function(resp) {
-                scope.model[loc].lat = resp.coordinates.lat;
-                scope.model[loc].lon = resp.coordinates.lon;
-                scope.model[loc].name = resp.address;
+                if (resp.error) {
+                  scope.model[loc].lat = undefined;
+                  scope.model[loc].lon = undefined;
+                  scope.model[loc].fullName = resp.error;
+                } else {
+                  scope.model[loc].lat = resp.coordinates.lat;
+                  scope.model[loc].lon = resp.coordinates.lon;
+                  scope.model[loc].fullName = resp.address;
+                }
               });
             };
 
