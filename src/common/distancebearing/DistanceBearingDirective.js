@@ -9,6 +9,31 @@
           link: function(scope, element) {
             var control = new ol.control.Control({element: element[0]});
 
+            function toDD(degrees, minutes, seconds) {
+              //If the first part is negative, make sure minutes and seconds are as well
+              if (degrees < 0) {
+                minutes = minutes < 0 ? minutes : -1 * minutes;
+                seconds = seconds < 0 ? seconds : -1 * seconds;
+              }
+              return (seconds / 3600) + (minutes / 60) + degrees;
+            }
+
+            function toDMS(decimalDegree) {
+              var degrees = Math.trunc(decimalDegree);
+              var minutes = Math.trunc((decimalDegree - degrees) * 60);
+              var seconds = (decimalDegree - degrees - (minutes / 60)) * 60 * 60;
+
+              seconds = +seconds.toPrecision(4);
+
+              //Show minutes and seconds as positive in the UI, even if they're negative
+              //toDD checks if degree is negative to convert
+              return {
+                deg: degrees,
+                min: Math.abs(minutes),
+                sec: Math.abs(seconds)
+              };
+            }
+
             scope.distanceConversionObject = {
               'm' : 1,
               'km' : 1 / 1000,
@@ -22,26 +47,51 @@
             };
 
             mapService.map.addControl(control);
-            scope.display = false;
+            scope.display = true;
 
             scope.model = {
               departure: {
                 name: '',
                 fullName: undefined,
                 lat: undefined,
-                lon: undefined
+                lon: undefined,
+                dms: {
+                  lat: {
+                    deg: undefined,
+                    min: undefined,
+                    sec: undefined
+                  },
+                  lon: {
+                    deg: undefined,
+                    min: undefined,
+                    sec: undefined
+                  }
+                }
               },
               destination: {
                 name: '',
                 fullName: undefined,
                 lat: undefined,
-                lon: undefined
+                lon: undefined,
+                dms: {
+                  lat: {
+                    deg: undefined,
+                    min: undefined,
+                    sec: undefined
+                  },
+                  lon: {
+                    deg: undefined,
+                    min: undefined,
+                    sec: undefined
+                  }
+                }
               },
               distanceUnitsMultiplier: scope.distanceConversionObject.nm,
               bearingUnitsMultiplier: scope.bearingConversionObject['°'],
               distance: 0,
               bearing: 0,
-              displayOnMap: false
+              displayOnMap: false,
+              dmsInput: true
             };
 
             scope.showOnMap = function() {
@@ -57,14 +107,26 @@
             };
 
             scope.retrieveCoordinates = function(loc) {
+              var props = ['deg', 'min', 'sec'], i;
+
               distanceBearingService.search(scope.model[loc].name).then(function(resp) {
                 if (resp.error) {
                   scope.model[loc].lat = undefined;
                   scope.model[loc].lon = undefined;
                   scope.model[loc].fullName = resp.error;
+                  for (i = 0; i < props.length; ++i) {
+                    scope.model[loc].dms.lat[props[i]] = undefined;
+                    scope.model[loc].dms.lon[props[i]] = undefined;
+                  }
                 } else {
                   scope.model[loc].lat = resp.coordinates.lat;
                   scope.model[loc].lon = resp.coordinates.lon;
+                  var dmsLat = toDMS(resp.coordinates.lat);
+                  var dmsLon = toDMS(resp.coordinates.lon);
+                  for (i = 0; i < props.length; ++i) {
+                    scope.model[loc].dms.lat[props[i]] = dmsLat[props[i]];
+                    scope.model[loc].dms.lon[props[i]] = dmsLon[props[i]];
+                  }
                   scope.model[loc].fullName = resp.address;
                 }
               });
