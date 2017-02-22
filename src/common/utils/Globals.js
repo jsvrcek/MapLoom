@@ -9,7 +9,7 @@ var settings = {
   coordinateDisplay: coordinateDisplays.DMS,
   DDPrecision: 8,
   MGRSPrecision: 10,
-  WFSVersion: '1.1.0',
+  WFSVersion: '1.0.0',
   WMSVersion: '1.1.1',
   WPSVersion: '1.0.0',
   //Set to OsmLocalUrl to 'default' for default mapnick osm basemap
