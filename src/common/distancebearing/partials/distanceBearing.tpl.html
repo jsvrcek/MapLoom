@@ -10,30 +10,36 @@
             <button class="pull-right" ng-click="toggleVisibility()">X</button>
         </div>
         <div>
-            <!-- TODO: Align the labels/text fields -->
             <div class="section">
-                <div>
-                    <span>{{'departure' | translate}}:</span>
-                    <input class="location-input" ng-model="model.departure.name" ng-blur="retrieveCoordinates('departure')"/>
+                <div class="col-md-12">
+                    <span class="col-md-6">{{'departure' | translate}}:</span>
+                    <input class="location-input col-md-4" ng-model="model.departure.name"/>
+                    <span ng-click="retrieveCoordinates('departure')" class="glyphicon glyphicon-search col-md-1"></span>
                 </div>
                 <!-- TODO: Decimal Degrees vs DMS-->
-                <div>
-                    <span>{{'latitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.departure.lat"/>
+                <div class="col-md-12">
+                    <span class="col-md-6">{{'latitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6" max="90" min="-90" ng-model="model.departure.lat"/>
                 </div>
-                <div>
-                    <span>{{'longitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.departure.lon"/>
+                <div class="col-md-12">
+                    <span class="col-md-6">{{'longitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6" max="180" min="-180" ng-model="model.departure.lon"/>
                 </div>
             </div>
+
             <div class="section">
-                <div>
-                    <span>{{'destination' | translate}}:</span>
-                    <input class="location-input" ng-model="model.destination.name" ng-blur="retrieveCoordinates('destination')"/>
+                <div class="col-md-12">
+                    <span class="col-md-6">{{'destination' | translate}}:</span>
+                    <input class="location-input col-md-4" ng-model="model.destination.name"/>
+                    <span ng-click="retrieveCoordinates('destination')" class="glyphicon glyphicon-search col-md-1"></span>
                 </div>
-                <div>
-                    <span>{{'latitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.destination.lat"/>
+                <div class="col-md-12">
+                    <span class="col-md-6">{{'latitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6"  max="90" min="-90" ng-model="model.destination.lat"/>
                 </div>
-                <div>
-                    <span>{{'longitude' | translate}}:</span> <input type="number" class="coordinate-input" ng-model="model.destination.lon"/>
+                <div class="col-md-12">
+                    <span class="col-md-6">{{'longitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6" max="180" min="-180" ng-model="model.destination.lon"/>
                 </div>
             </div>
         </div>
