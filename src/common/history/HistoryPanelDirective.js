@@ -73,6 +73,8 @@
                   if (goog.isArray(commit.parents.id)) {
                     if (commit.parents.id.length > 0) {
                       lastCommitId = commit.parents.id[0];
+                    } else {
+                      lastCommitId = commit.id;
                     }
                   } else {
                     lastCommitId = commit.parents.id;
