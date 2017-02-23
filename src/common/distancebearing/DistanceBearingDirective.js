@@ -8,6 +8,7 @@
           templateUrl: 'distancebearing/partials/distanceBearing.tpl.html',
           link: function(scope, element) {
             var control = new ol.control.Control({element: element[0]});
+            var props = ['deg', 'min', 'sec'];
 
             function toDD(degrees, minutes, seconds) {
               //If the first part is negative, make sure minutes and seconds are as well
@@ -47,7 +48,7 @@
             };
 
             mapService.map.addControl(control);
-            scope.display = true;
+            scope.display = false;
 
             scope.model = {
               departure: {
@@ -107,7 +108,7 @@
             };
 
             scope.retrieveCoordinates = function(loc) {
-              var props = ['deg', 'min', 'sec'], i;
+              var i;
 
               distanceBearingService.search(scope.model[loc].name).then(function(resp) {
                 if (resp.error) {
@@ -130,6 +131,29 @@
                   scope.model[loc].fullName = resp.address;
                 }
               });
+            };
+
+
+            //Fired whenever the user changes the dms, this then updates the lat lon dd values
+            scope.dmsChanged = function(loc) {
+              var model = scope.model[loc];
+              model.lat = toDD(model.dms.lat.deg, model.dms.lat.min, model.dms.lat.sec);
+              model.lon = toDD(model.dms.lon.deg, model.dms.lon.min, model.dms.lon.sec);
+              model.fullName = undefined;
+              model.name = undefined;
+            };
+
+            //Fired whenever the user changes the dd, this then updates the dms values
+            scope.ddChanged = function(loc) {
+              var model = scope.model[loc];
+              var dmsLat = toDMS(model.lat);
+              var dmsLon = toDMS(model.lon);
+              for (var i = 0; i < props.length; ++i) {
+                model.dms.lat[props[i]] = dmsLat[props[i]];
+                model.dms.lon[props[i]] = dmsLon[props[i]];
+              }
+              model.fullName = undefined;
+              model.name = undefined;
             };
 
             scope.calculate = function() {

@@ -367,6 +367,7 @@
     'distance' : 'Distance',
     'bearing' : 'Bearing',
     'calculate' : 'Calculate',
+    'enable_dms' : 'Enable Degree Minute Seconds Input',
     'display_on_map' : 'Display on Map'
 
   };

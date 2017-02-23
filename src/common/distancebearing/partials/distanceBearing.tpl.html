@@ -9,7 +9,7 @@
             <button class="pull-right close-icon" ng-click="toggleVisibility()">X</button>
         </div>
         <div>
-            <div class="section">
+            <div class="section" style="margin-bottom: 25px;">
                 <div class="col-md-12">
                     <span class="col-md-6">{{'departure' | translate}}:</span>
                     <input class="location-input col-md-4" ng-model="model.departure.name"/>
@@ -20,14 +20,29 @@
                         {{model.departure.fullName}}
                     </span>
                 </div>
-                <!-- TODO: Decimal Degrees vs DMS-->
                 <div class="col-md-12">
-                    <span class="col-md-6">{{'latitude' | translate}}:</span>
-                    <input type="number" class="coordinate-input col-md-6" max="90" min="-90" ng-model="model.departure.lat"/>
+                    <span ng-class="{'col-md-6' : !model.dmsInput, 'col-md-12' : model.dmsInput}">{{'latitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6" max="90" min="-90" ng-model="model.departure.lat" ng-show="!model.dmsInput"/>
+                </div>
+                <div class="col-md-12 dms-input" ng-show="model.dmsInput">
+                    <input type="number" ng-change="dmsChanged('departure')" class="coordinate-input col-md-3" max="90" min="-90" ng-model="model.departure.dms.lat.deg"/>
+                    <span class="dms-label">°</span>
+                    <input type="number" ng-change="dmsChanged('departure')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.departure.dms.lat.min"/>
+                    <span class="dms-label">'</span>
+                    <input type="number" ng-change="dmsChanged('departure')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.departure.dms.lat.sec"/>
+                    <span class="dms-label">"</span>
                 </div>
                 <div class="col-md-12">
-                    <span class="col-md-6">{{'longitude' | translate}}:</span>
-                    <input type="number" class="coordinate-input col-md-6" max="180" min="-180" ng-model="model.departure.lon"/>
+                    <span ng-class="{'col-md-6' : !model.dmsInput, 'col-md-12' : model.dmsInput}">{{'longitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6" max="180" min="-180" ng-model="model.departure.lon" ng-show="!model.dmsInput"/>
+                </div>
+                <div class="col-md-12 dms-input" ng-show="model.dmsInput">
+                    <input type="number" ng-change="dmsChanged('departure')" class="coordinate-input col-md-3" max="180" min="-180" ng-model="model.departure.dms.lon.deg"/>
+                    <span class="dms-label">°</span>
+                    <input type="number" ng-change="dmsChanged('departure')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.departure.dms.lon.min"/>
+                    <span class="dms-label">'</span>
+                    <input type="number" ng-change="dmsChanged('departure')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.departure.dms.lon.sec"/>
+                    <span class="dms-label">"</span>
                 </div>
             </div>
 
@@ -43,12 +58,28 @@
                     </span>
                 </div>
                 <div class="col-md-12">
-                    <span class="col-md-6">{{'latitude' | translate}}:</span>
-                    <input type="number" class="coordinate-input col-md-6"  max="90" min="-90" ng-model="model.destination.lat"/>
+                    <span ng-class="{'col-md-6' : !model.dmsInput, 'col-md-12' : model.dmsInput}">{{'latitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6"  max="90" min="-90" ng-model="model.destination.lat"  ng-show="!model.dmsInput"/>
+                </div>
+                <div class="col-md-12 dms-input" ng-show="model.dmsInput">
+                    <input type="number" ng-change="dmsChanged('destination')" class="coordinate-input col-md-3" max="90" min="-90" ng-model="model.destination.dms.lat.deg"/>
+                    <span class="dms-label">°</span>
+                    <input type="number" ng-change="dmsChanged('destination')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.destination.dms.lat.min"/>
+                    <span class="dms-label">'</span>
+                    <input type="number" ng-change="dmsChanged('destination')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.destination.dms.lat.sec"/>
+                    <span class="dms-label">"</span>
                 </div>
                 <div class="col-md-12">
-                    <span class="col-md-6">{{'longitude' | translate}}:</span>
-                    <input type="number" class="coordinate-input col-md-6" max="180" min="-180" ng-model="model.destination.lon"/>
+                    <span ng-class="{'col-md-6' : !model.dmsInput, 'col-md-12' : model.dmsInput}">{{'longitude' | translate}}:</span>
+                    <input type="number" class="coordinate-input col-md-6" max="180" min="-180" ng-model="model.destination.lon"  ng-show="!model.dmsInput"/>
+                </div>
+                <div class="col-md-12 dms-input" ng-show="model.dmsInput">
+                    <input type="number" ng-change="dmsChanged('destination')" class="coordinate-input col-md-3" max="180" min="-180" ng-model="model.destination.dms.lon.deg"/>
+                    <span class="dms-label">°</span>
+                    <input type="number" ng-change="dmsChanged('destination')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.destination.dms.lon.min"/>
+                    <span class="dms-label">'</span>
+                    <input type="number" ng-change="dmsChanged('destination')" class="coordinate-input col-md-3" max="60" min="0" ng-model="model.destination.dms.lon.sec"/>
+                    <span class="dms-label">"</span>
                 </div>
             </div>
         </div>
@@ -70,6 +101,9 @@
 
                 </div>
             </div>
+        </div>
+        <div class="section">
+            <label><input type="checkbox" ng-model="model.dmsInput"/> {{'enable_dms' | translate}}</label>
         </div>
         <div class="section">
             <label><input type="checkbox" ng-model="model.displayOnMap" ng-change="showOnMap()"/> {{'display_on_map' | translate}}</label>
