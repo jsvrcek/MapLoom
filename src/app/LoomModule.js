@@ -29,6 +29,7 @@
     'loom_test',
     'loom_timeline',
     'loom_measure',
-    'loom_distance_bearing'
+    'loom_distance_bearing',
+    'loom_breadcrumbs'
   ]);
 }());

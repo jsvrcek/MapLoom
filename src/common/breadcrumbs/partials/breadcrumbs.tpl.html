@@ -1,0 +1,34 @@
+<div id="breadcrumbs">
+    <button class="icon" ng-click="toggleVisibility()" tooltip-placement="left" tooltip="{{'breadcrumbs' | translate}}">
+        <i class="glyphicon glyphicon-calendar"></i>
+    </button>
+    <div class="popup" ng-show="display">
+        <div class="title-section">
+            <span class="title">{{'breadcrumbs' | translate}}</span>
+            <button class="pull-right close-icon"
+                    tooltip="{{'close' | translate}}"
+                    ng-click="toggleVisibility()"><i class="glyphicon glyphicon-remove-circle"></i></button>
+        </div>
+        <div class="section">
+            <form name="breadcrumbsForm">
+                <label>{{'start_date' | translate}}</label>
+                <datetimepicker class="startDate" date-object="model.startDate" time="false"></datetimepicker>
+
+                <label>{{'end_date' | translate}}</label>
+                <datetimepicker class="endDate" date-object="model.endDate" end-date="model.currentDate" time="false"></datetimepicker>
+
+                <label>{{'tail_number' | translate}}</label>
+                <div class="col-md-12 tail-number">
+                    <input required ng-model="model.tailNumber"/>
+                </div>
+                <div ng-if="model.errors" class="error-message">
+                    {{model.errors}}
+                </div>
+                <button ng-click="breadcrumbsForm.$valid && search()"
+                        ng-disabled="breadcrumbsForm.$invalid">{{'search' | translate}}</button>
+                <button ng-click="clearResults()">{{'clear_results' | translate}}</button>
+            </form>
+        </div>
+    </div>
+
+</div>

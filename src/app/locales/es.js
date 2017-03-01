@@ -363,7 +363,11 @@
     'bearing' : 'Bearing',
     'calculate' : 'Calculate',
     'enable_dms' : 'Enable Degree Minute Seconds Input',
-    'display_on_map' : 'Display on Map'
+    'display_on_map' : 'Display on Map',
+    'tail_number' : 'Tail Number:',
+    'clear_results' : 'Clear Results',
+    'close' : 'Close',
+    'breadcrumbs' : 'Breadcrumbs'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);
