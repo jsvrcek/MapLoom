@@ -368,7 +368,8 @@
     'submit_date_time' : 'Submitted Date',
     'approved_date' : 'Approved Date',
     'username' : 'Username',
-    'add_comment' : 'Add Comment'
+    'add_comment' : 'Add Comment',
+    'comments_enabled' : 'Comments Enabled'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);

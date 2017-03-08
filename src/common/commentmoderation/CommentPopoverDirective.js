@@ -51,6 +51,9 @@
             element.mouseleave(function() {
               element.popover('hide');
             });
+            element.click(function() {
+              element.popover('hide');
+            });
           }
         };
       });
