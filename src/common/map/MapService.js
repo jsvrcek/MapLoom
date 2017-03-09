@@ -1077,6 +1077,16 @@
     // Update the map after save.
     this.updateMap = function(data) {
       service_.id = data.id;
+      httpService_({
+        method: 'POST',
+        url: '/maps/' + service_.id + '/setComments',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+        data: $.param({
+          enabled: service_.commentsEnabled
+        })
+      });
     };
 
     this.save = function(copy) {
@@ -1163,16 +1173,7 @@
         }
       });
 
-      httpService_({
-        method: 'POST',
-        url: '/maps/' + service_.id + '/setComments',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFToken',
-        data: $.param({
-          enabled: service_.commentsEnabled
-        })
-      });
+
 
     };
 

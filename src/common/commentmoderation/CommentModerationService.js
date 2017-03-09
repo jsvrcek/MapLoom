@@ -8,7 +8,6 @@
     var commentModerationService;
 
     this.$get = function($translate, $q, $http, mapService, $rootScope, $compile) {
-      var baseURL = '/maps/' + mapService.id + '/comments';
       var jsonReader = new ol.format.GeoJSON();
       var vectorSource = this.vectorSource = new ol.source.Vector();
       var popup = new ol.Overlay({
@@ -22,6 +21,7 @@
 
 
       this.refreshComments = function() {
+        var baseURL = '/maps/' + mapService.id + '/comments';
         return $http({method: 'GET', url: baseURL}).then(function(resp) {
           log.length = 0;
           this.editCommentPermission = resp.data.staff;
@@ -91,6 +91,7 @@
       }.bind(this));
 
       this.timeSearch = function(startTime, endTime) {
+        var baseURL = '/maps/' + mapService.id + '/comments';
         return $http({method: 'GET', url: baseURL + '?start_date=' + startTime +
               '&end_date=' + endTime}).then(function(resp) {
           return jsonReader.readFeatures(resp.data);
@@ -98,6 +99,7 @@
       };
 
       this.csvExport = function(startTime, endTime) {
+        var baseURL = '/maps/' + mapService.id + '/comments';
         return baseURL + '?csv=True&start_date=' + startTime + '&end_date=' + endTime;
       };
 
@@ -106,6 +108,7 @@
           location.transform(mapService.map.getView().getProjection(), new ol.proj.Projection({code: 'EPSG:4326'}));
           location = new ol.format.GeoJSON().writeGeometry(location);
         }
+        var baseURL = '/maps/' + mapService.id + '/comments';
         return $http({
           method: 'POST',
           url: baseURL,
@@ -123,6 +126,7 @@
       };
 
       this.modifyComment = function(id, status) {
+        var baseURL = '/maps/' + mapService.id + '/comments';
         return $http({
           method: 'PUT',
           url: baseURL,
@@ -140,6 +144,7 @@
       };
 
       this.enableSummaryMode = function() {
+        this.refreshComments();
         this.summaryMode = true;
         this.title = $translate.instant('comment_summary');
       };

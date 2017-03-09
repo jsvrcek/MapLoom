@@ -61,6 +61,7 @@
                   scope.latestDraw.getGeometry()).then(function() {
                              element.closest('.modal').modal('hide');
                              scope.isLoading = false;
+                             commentModerationService.refreshComments();
               });
             };
 
