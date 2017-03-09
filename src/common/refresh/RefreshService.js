@@ -10,10 +10,11 @@
   var featureDiffService_ = null;
   var service_ = null;
   var timeout_ = null;
+  var commentModerationService_ = null;
 
   module.provider('refreshService', function() {
     this.$get = function(mapService, $translate, notificationService, geogigService, historyService,
-        dialogService, featureDiffService) {
+        dialogService, featureDiffService, commentModerationService) {
       mapService_ = mapService;
       notificationService_ = notificationService;
       geogigService_ = geogigService;
@@ -21,6 +22,7 @@
       dialogService_ = dialogService;
       translate_ = $translate;
       featureDiffService_ = featureDiffService;
+      commentModerationService_ = commentModerationService;
 
       service_ = this;
 
@@ -63,6 +65,7 @@
           }, refreshTimeout);
           return;
         }
+        commentModerationService_.refreshComments();
 
         var doDiff = function(repoChange, metadata) {
           var options = new GeoGigDiffOptions();

@@ -46,7 +46,7 @@
 
               for (var i = 0; i < scope.log.length; ++i) {
                 var status = scope.log[i].get('status');
-                if (status === 'Accepted') {
+                if (status === 'Approved') {
                   ++scope.acceptedCount;
                 } else if (status === 'Rejected') {
                   ++scope.rejectedCount;
