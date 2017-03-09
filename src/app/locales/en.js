@@ -374,7 +374,8 @@
     'approved_date' : 'Approved Date',
     'username' : 'Username',
     'add_comment' : 'Add Comment',
-    'comments_enabled' : 'Comments Enabled'
+    'comments_enabled' : 'Comments Enabled',
+    'bounding_box' : 'Bounding Box'
   };
 
   var module = angular.module('loom_translations_en', ['pascalprecht.translate']);
