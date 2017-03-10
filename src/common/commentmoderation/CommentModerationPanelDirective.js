@@ -77,9 +77,10 @@
               }
             };
 
-            scope.updateComment = function(status) {
+            scope.updateComment = function(status, event) {
               previousSelection.set('status', status);
               commentModerationService.modifyComment(previousSelection.id_, status);
+              event.stopPropagation();
             };
 
             updateVariables();

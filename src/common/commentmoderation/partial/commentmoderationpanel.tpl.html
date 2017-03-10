@@ -8,8 +8,8 @@
         <div class="comment-author-name ellipsis">{{comment.get('username') || 'anonymous' | translate}}</div>
         <div class="comment-submit-time ellipsis">{{comment.get('submit_date_time') | date: 'MM/dd/yyyy @ h:mm a'}}</div>
         <div ng-if="comment.active" class="button-bar">
-            <button class="glyphicon glyphicon-thumbs-up" title="Approve" ng-click="updateComment('Approved')"></button>
-            <button class="glyphicon glyphicon-thumbs-down" title="Reject" ng-click="updateComment('Rejected')"></button>
+            <button class="glyphicon glyphicon-thumbs-up" title="Approve" ng-click="updateComment('Approved', $event)"></button>
+            <button class="glyphicon glyphicon-thumbs-down" title="Reject" ng-click="updateComment('Rejected', $event)"></button>
         </div>
       </li>
       <li ng-if="commentModerationService.nextPage" class="list-group-item">
