@@ -2,7 +2,8 @@
   var module = angular.module('loom_comment_moderation_panel_directive', []);
 
   module.directive('loomCommentModerationPanel',
-      function($rootScope, $timeout, $translate, diffService, dialogService, commentModerationService, pulldownService) {
+      function($rootScope, $timeout, $translate, diffService, dialogService, commentModerationService, pulldownService,
+               mapService) {
         return {
           //restrict: 'C',
           //replace: true,
@@ -63,6 +64,10 @@
 
 
             scope.commentClicked = function(comment) {
+              if (comment.active === true) {
+                var bounds = comment.getGeometry().getExtent();
+                mapService.zoomToExtent(bounds, true);
+              }
               if (commentModerationService.editCommentPermission) {
                 if (previousSelection) {
                   previousSelection.active = false;
