@@ -4,7 +4,7 @@
 
   module.directive('loomHistoryDiff',
       function($rootScope, historyService, $translate, geogigService, diffService,
-               pulldownService, dialogService, $window) {
+               pulldownService, dialogService, configService, $window) {
         return {
           templateUrl: 'history/partial/historydiff.tpl.html',
           link: function(scope, element, attrs) {
@@ -120,7 +120,8 @@
               var until = historyService.layer.get('metadata').branchName;
               // TODO: Make this work with a proxy once it supports authentication
               var url = repo.url + '/log.csv?until=' + until + '&path=' +
-                  path + '&sinceTime=' + sinceTime + '&untilTime=' + untilTime + '&summary=true';
+                  path + '&sinceTime=' + sinceTime + '&untilTime=' + untilTime + '&summary=true' +
+                  ((configService.admin) ? '&isAdmin=true' : '');
               $window.open(url);
             };
 
@@ -134,7 +135,8 @@
               var until = historyService.layer.get('metadata').branchName;
               // TODO: Make this work with a proxy once it supports authentication
               var url = repo.url + '/log.zip?until=' + until + '&path=' +
-                  path + '&sinceTime=' + sinceTime + '&untilTime=' + untilTime + '&summary=true&zip=true';
+                  path + '&sinceTime=' + sinceTime + '&untilTime=' + untilTime + '&summary=true&zip=true' +
+                  ((configService.admin) ? '&isAdmin=true' : '');
               $window.open(url);
             };
           }
