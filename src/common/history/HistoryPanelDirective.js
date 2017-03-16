@@ -2,7 +2,7 @@
   var module = angular.module('loom_history_panel_directive', []);
 
   module.directive('loomHistoryPanel',
-      function($rootScope, $timeout, $translate, diffService, dialogService, historyService, pulldownService) {
+      function($rootScope, $timeout, $translate, diffService, dialogService, historyService, pulldownService, configService) {
         return {
           //restrict: 'C',
           //replace: true,
@@ -48,7 +48,16 @@
 
             scope.getCommitAuthor = function(commit) {
               if (goog.isDefAndNotNull(commit.author) && goog.isDefAndNotNull(commit.author['name'])) {
-                return commit.author['name'].length > 0 ? commit.author['name'] : $translate.instant('anonymous');
+                if (commit.author['name'].length > 0) {
+                  if (configService.admin) {
+                    return commit.author['name'];
+                  } else {
+                    var splitAuthor = commit.author['name'].split(' ');
+                    return (splitAuthor.length > 1) ? splitAuthor[0].substring(0, 1) + splitAuthor[1] : splitAuthor[0];
+                  }
+                } else {
+                  return $translate.instant('anonymous');
+                }
               }
               return $translate.instant('anonymous');
             };

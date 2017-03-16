@@ -50,18 +50,34 @@
               return '';
             };
 
-            var content = '<div class="popover-label">' + $translate.instant('author_name') + ':</div>' +
-                '<div class="popover-value">' + safeName(scope.commit.author) + '</div>' +
-                '<div class="popover-label">' + $translate.instant('author_email') + ':</div>' +
-                '<div class="popover-value">' + safeEmail(scope.commit.author) + '</div>' +
-                '<div class="popover-label">' + $translate.instant('committer_name') + ':</div>' +
-                '<div class="popover-value">' + safeName(scope.commit.committer) + '</div>' +
-                '<div class="popover-label">' + $translate.instant('committer_email') + ':</div>' +
-                '<div class="popover-value">' + safeEmail(scope.commit.committer) + '</div>' +
-                '<div class="popover-label">' + $translate.instant('commit_time') + ':</div>' +
-                '<div class="popover-value">' + prettyTime(scope.commit.committer) + '</div>' +
-                '<div class="popover-label">' + $translate.instant('message') + ':</div>' +
-                '<div class="popover-value">' + prettyMessage() + '</div>';
+            if (!goog.isDefAndNotNull(scope.admin)) {
+              scope.admin = scope.$eval(attrs.admin);
+            } else {
+              scope.admin = false;
+            }
+
+            var content;
+            if (scope.admin) {
+              content = '<div class="popover-label">' + $translate.instant('author_name') + ':</div>' +
+                  '<div class="popover-value">' + safeName(scope.commit.author) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('author_email') + ':</div>' +
+                  '<div class="popover-value">' + safeEmail(scope.commit.author) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('committer_name') + ':</div>' +
+                  '<div class="popover-value">' + safeName(scope.commit.committer) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('committer_email') + ':</div>' +
+                  '<div class="popover-value">' + safeEmail(scope.commit.committer) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('commit_time') + ':</div>' +
+                  '<div class="popover-value">' + prettyTime(scope.commit.committer) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('message') + ':</div>' +
+                  '<div class="popover-value">' + prettyMessage() + '</div>';
+            } else {
+              content = '<div class="popover-label">' + $translate.instant('author_name') + ':</div>' +
+                  '<div class="popover-value">' + scope.getCommitAuthor(scope.commit) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('commit_time') + ':</div>' +
+                  '<div class="popover-value">' + prettyTime(scope.commit.committer) + '</div>' +
+                  '<div class="popover-label">' + $translate.instant('message') + ':</div>' +
+                  '<div class="popover-value">' + prettyMessage() + '</div>';
+            }
 
             element.popover({
               trigger: 'manual',
