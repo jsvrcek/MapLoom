@@ -51,7 +51,8 @@
               <ul class="dropdown-menu">
                 <li>
                   <a ng-click="selectValue(prop, null)" ng-if="!featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">&nbsp;</a>
-                  <a ng-click="selectValue(prop, null); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">&nbsp;</a>
+                  <a ng-click="selectValue(prop, null); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && (prop[0] === 'fromTocl' || prop[0] === 'toFromcl')">&nbsp;</a>
+                  <a ng-click="selectValue(prop, null);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && (prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">&nbsp;</a>
                 </li>
                 <li ng-repeat="enum in prop.enum">
                   <a ng-click="selectValue(prop, $index)" ng-if="!featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath')">{{enum._value}}</a>
@@ -60,11 +61,12 @@
                   <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 3">3 - Shared Route</a>
                   <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 4">4 - Link</a>
                   <a ng-click="selectValue(prop, $index); bikeClassSelected($event.target);" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && enum._value == 7">7 - Stairs</a>
+                  <a ng-click="selectValue(prop, $index)" ng-if="featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && (prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')">{{enum._value}}</a>
                 </li>
               </ul>
           </div>
-            <input ng-model="prop[1]" type="text" class="form-control" ng-change="validateField(prop, 1)" disabled ng-show="!isBikepath"/>
-            <span class="form-control dropdown-label" disabled ng-if="isBikepath">{{ prop.initial }}</span>
+            <input ng-model="prop[1]" type="text" class="form-control" ng-change="validateField(prop, 1)" disabled ng-show="!isBikepath || (prop[0] !== 'fromTocl' && prop[0] !== 'toFromcl')"/>
+            <span class="form-control dropdown-label" disabled ng-if="isBikepath && (prop[0] === 'fromTocl' || prop[0] === 'toFromcl')">{{ prop.initial }}</span>
           </div>
           <div ng-switch-when="xsd:int" ng-class="{'has-error': !prop.valid}">
             <input ng-model="prop[1]" type="text" class="form-control" ng-change="validateField(prop, 1)" ng-readonly="{{readonly}}"/>
