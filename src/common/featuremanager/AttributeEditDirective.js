@@ -23,6 +23,11 @@
                       attributeTypes[property[0]]._type.search('gml:') === -1) {
                     prop = goog.object.clone(property);
                     prop.type = attributeTypes[prop[0]]._type;
+
+                    if (featureManagerService.getSelectedLayer().get('metadata').name.includes('bikepath') && prop[0] === 'NewRt_Y_N' && (!prop[1] || prop[1] === '')) {
+                      prop[1] = 'N';
+                    }
+
                     if (prop.type === 'simpleType') {
                       prop.enum =
                           attributeTypes[prop[0]].simpleType.restriction.enumeration;
