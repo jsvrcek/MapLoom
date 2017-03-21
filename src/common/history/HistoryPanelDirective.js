@@ -49,12 +49,7 @@
             scope.getCommitAuthor = function(commit) {
               if (goog.isDefAndNotNull(commit.author) && goog.isDefAndNotNull(commit.author['name'])) {
                 if (commit.author['name'].length > 0) {
-                  if (configService.admin) {
-                    return commit.author['name'];
-                  } else {
-                    var splitAuthor = commit.author['name'].split(' ');
-                    return (splitAuthor.length > 1) ? splitAuthor[0].substring(0, 1) + splitAuthor[1] : splitAuthor[0];
-                  }
+                  return configService.admin ? commit.author['name'] : commit.author['name'].split(' ')[0];
                 } else {
                   return $translate.instant('anonymous');
                 }
