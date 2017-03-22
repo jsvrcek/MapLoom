@@ -162,7 +162,7 @@
                 };
                 geogigService_.command(metadata.repoId, 'log', logOptions)
                     .then(function(response) {
-                      if (goog.isDefAndNotNull(response.commit)) {
+                      if (goog.isDefAndNotNull(response.commit) && goog.isDefAnNotNull(response.commit.id)) {
                         dialogService_.warn(translate_.instant('warning'), translate_.instant('newer_feature_version'),
                             [translate_.instant('yes_btn'), translate_.instant('no_btn')],
                             false).then(function(button) {
