@@ -460,6 +460,14 @@
                 item.newvalue = null;
               }
             }
+
+            // Ignore attributes that were previously empty and are now marked as "removed".
+            if ((item.changetype === 'REMOVED' && feature.change !== 'REMOVED') &&
+                (typeof item.oldvalue === 'string' && item.oldvalue.trim() === '')) {
+              item.changetype = 'NO_CHANGE';
+              item.newvalue = item.oldvalue;
+            }
+
             panel.attributes.push(item);
           } else {
             if (!goog.isDefAndNotNull(panel.geometry) &&
