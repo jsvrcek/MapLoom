@@ -62,6 +62,10 @@
                 params['style'] = 'bikepath_core';
               }
 
+              if (layer.get('metadata').name.includes('Subway_station_point')) {
+                params['rule'] = 'large';
+              }
+
               // parse the server url
               var uri = new goog.Uri(domain);
               // mix in the paramters
