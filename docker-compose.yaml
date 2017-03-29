@@ -1,0 +1,8 @@
+version: '2'
+services:
+  maploom:
+     build:
+       context: .
+       dockerfile: Dockerfile
+     volumes:
+       - ./:/var/lib/maploom:rw
