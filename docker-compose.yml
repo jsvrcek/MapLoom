@@ -5,4 +5,5 @@ services:
        context: .
        dockerfile: Dockerfile
      volumes:
-       - ./:/var/lib/maploom:rw
+       - ./build:/var/lib/maploom/build:rw
+       - ./src:/var/lib/maploom/src:ro
